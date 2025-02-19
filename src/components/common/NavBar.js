@@ -19,7 +19,7 @@ export default function NavBar({ session }) {
         return <></>
     }
     return (
-        <div className='flex items-center w-auto h-12 p-4 mb-2 shadow-md'>
+        <div className='flex items-center w-auto h-12 p-4 shadow-md'>
             <Link href ='/home' className='ml-7 text-sm transition-all'>
                 AITreD
             </Link>
