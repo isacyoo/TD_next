@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function Login() {
-    const [loginFailed, setLoginFailed] = useState(false)
+    const [ loginFailed, setLoginFailed ] = useState(false)
     
     const router = useRouter()
 

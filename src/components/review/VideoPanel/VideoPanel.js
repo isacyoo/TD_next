@@ -4,7 +4,7 @@ import VideoButtons from "./VideoButtons"
 import { createRef, useState, useEffect } from "react"
 
 export default function VideoPanel({ videoUrls }) {
-    const [selectedVideo, setSelectedVideo] = useState(0)
+    const [ selectedVideo, setSelectedVideo ] = useState(0)
     const videoRefs = videoUrls.map(() => createRef())
 
     const selectVideo = (index) => {

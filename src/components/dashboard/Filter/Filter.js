@@ -10,11 +10,11 @@ export default function Filter({ actions, locationId, history}) {
     const actionNames = Object.keys(actions)
     const actionIds = Object.values(actions)
     const currentChecked = Array(actionNames.length).fill(false).map((_, i) => currentSearchParams.getAll('actionId').includes(actionIds[i].toString()))
-    const [showModal, setShowModal] = useState(false)
-    const [personId, setPersonId] = useState(currentSearchParams.has('personId') ? currentSearchParams.get('personId') : '' )
-    const [actionsChecked, setActionsChecked] = useState(currentChecked)
-    const [timeSelected, setTimeSelected] = useState(currentSearchParams.has('time') ? currentSearchParams.get('time') : allTimes[0])
-    const [currentURL, setCurrentURL] = useState(usePathname())
+    const [ showModal, setShowModal ] = useState(false)
+    const [ personId, setPersonId ] = useState(currentSearchParams.has('personId') ? currentSearchParams.get('personId') : '' )
+    const [ actionsChecked, setActionsChecked ] = useState(currentChecked)
+    const [ timeSelected, setTimeSelected ] = useState(currentSearchParams.has('time') ? currentSearchParams.get('time') : allTimes[0])
+    const [ currentURL, setCurrentURL ] = useState(usePathname())
     const router = useRouter()
     
 

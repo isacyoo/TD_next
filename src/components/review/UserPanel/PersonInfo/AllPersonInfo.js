@@ -3,7 +3,7 @@ import { useState } from 'react'
 import PersonInfo from './PersonInfo'
 
 export default function AllPersonInfo({ location, entriesInfo }) {
-    const [currentPerson, setCurrentPerson] = useState(0)
+    const [ currentPerson, setCurrentPerson ] = useState(0)
 
     if (!entriesInfo) {
         return (<></>)

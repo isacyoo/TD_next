@@ -6,9 +6,9 @@ import { usePathname, useRouter } from 'next/navigation'
 import { post } from '@/util/clientApi'
 
 export default function ActionContainer({ actions, currentAction }) {
-    const [selectedAction, setSelectedAction] = useState(0)
-    const [showModal, setShowModal] = useState(false)
-    const [actionConfirmed, setActionConfirmed] = useState(false)
+    const [ selectedAction, setSelectedAction ] = useState(0)
+    const [ showModal, setShowModal ] = useState(false)
+    const [ actionConfirmed, setActionConfirmed ] = useState(false)
     const pathName = usePathname()
     const router = useRouter()
     const videoId = pathName.split('/').slice(-1)[0]

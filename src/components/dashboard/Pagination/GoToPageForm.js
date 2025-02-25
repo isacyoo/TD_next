@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 
 export default function GoToPageForm({ locationId, history, pages, currentPage }) {
-    const [goToPage, setGoToPage] = useState(currentPage)
+    const [ goToPage, setGoToPage ] = useState(currentPage)
     const searchParams = new URLSearchParams(useSearchParams()).toString()
     const router = useRouter()
     
