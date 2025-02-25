@@ -52,7 +52,7 @@ export default function ActionContainer({ actions, currentAction }) {
                 <label className="mr-3 py-1">Choose actions:</label>
                 <ActionDropdown actions={actions} selectedAction={selectedAction} setSelectedAction={setSelectedAction}></ActionDropdown>
             </div>
-            { showModal ? <ActionConfirmModal selectedAction={selectedAction} currentAction={currentAction} closeAndCancel={()=>setShowModal(false)} closeAndConfirm={()=>closeAndConfirm()}></ActionConfirmModal> : ''}
+            { showModal ? <ActionConfirmModal selectedAction={actions[selectedAction].name} currentAction={currentAction} closeAndCancel={()=>setShowModal(false)} closeAndConfirm={()=>closeAndConfirm()}></ActionConfirmModal> : ''}
             <button onClick={()=>confirmIfHistory()} className="py-3 px-5 bg-primary-700 border-none rounded cursor-pointer mr-1 text-primary-200">Confirm Action</button>
         </div>
     )

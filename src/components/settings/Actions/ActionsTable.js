@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { post } from '@/util/clientApi'
 import { useRouter } from 'next/navigation'
+import Modal from '@/components/common/Modal'
 
 export default function ActionsTable({ actions }) {
     const [ allActions, setAllActions ] = useState(actions)
@@ -95,7 +96,7 @@ export default function ActionsTable({ actions }) {
                     ))}
                 </tbody>
             </table>
-            {showModal ? <Modal actionId={deleteActionId} setShowModal={setShowModal} handleDelete={handleDelete}/> : <></>}
+            {showModal ? <ActionConfirmModal actionId={deleteActionId} setShowModal={setShowModal} handleDelete={handleDelete}/> : <></>}
             <button onClick={() => handleUpdateActions(allActions)} className="bg-primary-200 p-2 rounded-xl">Save</button>
         </div>
     )
@@ -145,30 +146,19 @@ function DeleteButton({ action, setShowModal, setDeleteActionId }) {
     )
 }
 
-function Modal({ actionId, setShowModal, handleDelete }) {
+function ActionConfirmModal({ actionId, setShowModal, handleDelete }) {
     return (
-        <div className="fixed inset-0 flex flex-col justify-center items-center bg-primary-900 bg-opacity-50 z-50">
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-primary-100 outline-none focus:outline-none">
-                    <div className="flex items-start justify-between p-5 border-b border-solid border-primary-200 rounded-t">
-                        <h3 className="text-xl font-semibold">
-                            Are you sure you want to delete this action?
-                        </h3>
-                        <button
-                            className="p-1 ml-auto border-0 text-primary-900 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                            onClick={() => setShowModal(false)}
-                        >
-                            <span className="text-primary-900 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                ×
-                            </span>
-                        </button>
-                    </div>
-                    <div className="relative p-6 flex-auto border-0 rounded-lg bg-primary-50">
-                        <h3 className="font-semibold">This cannot be undone</h3>
-                        <button className="bg-primary-200 p-2 rounded-xl" onClick={() => handleDelete(actionId, setShowModal)}>Delete</button>
-                    </div>
-                </div>
-            </div>
+        <Modal title="Warning!" setShowModal={setShowModal}>
+            <ModalContent actionId={actionId} handleDelete={handleDelete}/>
+        </Modal>
+    )
+}
+
+function ModalContent({ actionId, handleDelete }) {
+    return (
+        <div className = "relative p-6 flex-auto border-0 rounded-lg bg-primary-50">
+            <h3 className="font-semibold">This cannot be undone</h3>
+            <button className="bg-primary-200 p-2 rounded-xl" onClick={() => handleDelete(actionId)}>Delete</button>
         </div>
     )
 }
