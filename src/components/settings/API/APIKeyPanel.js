@@ -36,6 +36,8 @@ function APIResetPanel({ setCurrentApiKey }) {
             const apiKey = await res.json()
             setCurrentApiKey(apiKey.api_key)
             setResMessage(apiKey.msg)
+        } else if (res.status == 401 || res.status == 403 || res.status == 422) {
+            throw new Error(res.status)
         } else {
             setResMessage("An error occurred while resetting the API key")
         }
