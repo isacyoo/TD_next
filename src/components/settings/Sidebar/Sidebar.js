@@ -17,7 +17,7 @@ export default function SettingsSidebar() {
                     <Link href='/settings/schedule'>Schedule</Link>
                 </li>
                 <li className='py-3 px-10 border-b border-primary-900 font-light hover:bg-primary-700 duration-150'>
-                    <Link href='/settings/api'>API key</Link>
+                    <Link href='/settings/api'>Manage API key</Link>
                 </li>                
             </ul>
         </div>

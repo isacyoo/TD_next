@@ -2,53 +2,84 @@
 
 import { useState } from 'react'
 import { post } from '@/util/clientApi'
+import Modal from '@/components/common/Modal'
+import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { CiMedicalClipboard } from "react-icons/ci";
 
-export default function APIKeyPanel({ apiKey }) {
+
+export default function APIKeyPanel() {
+    return (
+        <div>
+            <APIResetPanel />
+        </div>
+    )
+}
+
+function APIResetPanel() {
     const [ hoverMessage, setHoverMessage ] = useState("Click to copy to clipboard")
-    const [ currentApiKey, setCurrentApiKey ] = useState(apiKey)
+    const [ newApiKey, setNewApiKey ] = useState("")
+    const [ expiryDate, setExpiryDate ] = useState("")
+    const [ showModal, setShowModal ] = useState(false)
 
     const handleCopy = async () => {
-        await navigator.clipboard.writeText(currentApiKey)
+        await navigator.clipboard.writeText(newApiKey)
         setHoverMessage("Copied!")
         setTimeout(() => {
             setHoverMessage("Click to copy to clipboard")
         }, 2000)
     }
 
-    return (
-        <div>
-            <div className="flex items-center relative group">
-                <h2>API Key</h2>
-                <p>******</p>
-                <button onClick={handleCopy}>o</button>
-                <span className="absolute bottom-1/2 left-1/2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">{hoverMessage}</span>
-            </div>
-            <APIResetPanel setCurrentApiKey={setCurrentApiKey}/>
-        </div>
-    )
-}
-
-function APIResetPanel({ setCurrentApiKey }) {
-    const [ resMessage, setResMessage ] = useState("")
     const handleReset = async () => {
+        setShowModal(false)
         const res = await post('/reset_api_key')
         if (res.ok) {
             const apiKey = await res.json()
-            setCurrentApiKey(apiKey.api_key)
-            setResMessage(apiKey.msg)
+            setNewApiKey(apiKey.api_key)
+            setExpiryDate(apiKey.expiry_date)
         } else if (res.status == 401 || res.status == 403 || res.status == 422) {
             throw new Error(res.status)
         } else {
-            setResMessage("An error occurred while resetting the API key")
+            alert("An error occurred. Please try again.")
         }
     }
     return (
         <div>
-            <h2>Reset API Key</h2>
-            <button onClick={handleReset}>Reset</button>
-            <p>{resMessage}</p>
-
+            <div className="font-bold text-xl my-6">Reset API Key</div>
+            <Button onClick={() => setShowModal(true)}>Reset</Button>
+            {showModal ? <Modal title="Reset API Key" setShowModal={setShowModal}>
+                    <ModalContent setShowModal={setShowModal} handleReset={handleReset} />
+                </Modal> : <></>}
+            {newApiKey && <ShowAPIKey handleCopy={handleCopy} hoverMessage={hoverMessage} expiryDate={expiryDate}/>}
         </div>
     )
 }
 
+function ModalContent({ setShowModal, handleReset}) {
+    return (
+        <div className="relative p-6 flex-auto border-0 rounded-lg">
+            <p>Are you sure you want to reset your API key?</p>
+            <Button className="m-2" onClick={() => setShowModal(false)}>Cancel</Button>
+            <Button className="m-2" onClick={handleReset}>Reset</Button>
+        </div>
+    )
+}
+
+
+function ShowAPIKey({ handleCopy, hoverMessage, expiryDate }) {
+    return (
+        <Alert className="my-4">
+            <AlertTitle>API Key reset</AlertTitle>
+            <AlertDescription>Your API Key has been reset!</AlertDescription>
+            <AlertDescription>The original API Key has been revoked</AlertDescription>
+            <AlertDescription>The API key will be valid until {expiryDate}</AlertDescription>
+            <AlertDescription className="flex items-center text-center">
+                <div className="font-semibold">Copy to clipboard</div>
+                <div className="relative group mx-2">
+                    <button onClick={handleCopy}><CiMedicalClipboard /></button>
+                    <span className="absolute bottom-2 left-2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">{hoverMessage}</span>
+                </div>
+            </AlertDescription>
+        </Alert>
+    )
+}

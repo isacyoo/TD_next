@@ -1,21 +1,10 @@
 import APIKeyPanel from './APIKeyPanel'
-import { fetcher } from '@/util/api'
 
 export default async function API() {
-    const apiKey = await getAPIKey()
     return (
         <div>
-            <h1>API</h1>
-            <APIKeyPanel apiKey={apiKey.api_key} />
+            <h1 className="font-extrabold text-2xl mb-4">Manage your API Key</h1>
+            <APIKeyPanel />
         </div>
     )
-}
-
-async function getAPIKey() {
-    const res = await fetcher('/api_key')
-    if (res.ok) {
-        return res.json()
-    } else {
-        throw new Error(res.status)
-    }
 }

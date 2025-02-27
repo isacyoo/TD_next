@@ -3,12 +3,21 @@
 import { useState } from 'react'
 import { post } from '@/util/clientApi'
 import { useRouter } from 'next/navigation'
-import Modal from '@/components/common/Modal'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+
 
 export default function ActionsTable({ actions }) {
     const [ allActions, setAllActions ] = useState(actions)
-    const [ showModal, setShowModal ] = useState(false)
-    const [ deleteActionId, setDeleteActionId ] = useState(null)
 
     const router = useRouter()
 
@@ -42,33 +51,31 @@ export default function ActionsTable({ actions }) {
         setAllActions(updatedActions)
     }
 
-    const handleDelete = (id, setShowModal) => {
-        post(`/delete_action/${id}`).then((res) => {
-            if (res.ok) {
-                const updatedActions = allActions.filter(action => action.id !== id)
-                setAllActions(updatedActions)
-                setShowModal(false)
-            } else if (res.status === 400) {
-                res.json().then((data) => {
-                    if (data.msg == "Action has associated events") {
-                        alert(data.msg + ". Please delete associated events first.")
-                    } else {
-                        alert("Delete action failed")
-                    }
-                    setShowModal(false)
-                }
-            )
-            } else if (res.status === 404) {
-                alert("Action not found")
-                setShowModal(false)
-            } else {
-                throw new Error(res.status)
+    const handleDelete = (id) => {
+        const updatedActions = allActions.map(action => {
+            if (action.id === id) {
+                return { ...action, is_deleted: true }
             }
+            return action
         })
+        setAllActions(updatedActions)
     }
 
     const handleUpdateActions = (updatedActions) => {
+        const hasEmptyName = updatedActions.some(action => action.name === "")
+        const hasDuplicateName = updatedActions.some((action, index) => updatedActions.findIndex(a => a.name === action.name) !== index)
+        
+        if (hasEmptyName) {
+            alert("Action name cannot be empty")
+            return
+        }
+        
+        if (hasDuplicateName) {
+            alert("Action name must be unique")
+            return
+        }
         post('/update_actions', { actions: updatedActions }).then((res) => {
+        
             if (res.ok) {
                 alert("Actions updated")
                 router.refresh()
@@ -80,85 +87,64 @@ export default function ActionsTable({ actions }) {
 
     return (
         <div>
-            <table>
+            <Table>
                 <ActionTableHeader />
-                <tbody>
+                <TableBody>
                     {allActions.map(action => (
+                        action.is_deleted ? null :
                         <ActionRow 
                             key={action.id} 
                             action={action} 
                             handleNameChange={handleNameChange} 
                             handleIsTailgatingChange={handleIsTailgatingChange} 
                             handleToggle={handleToggle}
-                            setShowModal={setShowModal}
-                            setDeleteActionId={setDeleteActionId}
+                            handleDelete={handleDelete}
                         />
                     ))}
-                </tbody>
-            </table>
-            {showModal ? <ActionConfirmModal actionId={deleteActionId} setShowModal={setShowModal} handleDelete={handleDelete}/> : <></>}
-            <button onClick={() => handleUpdateActions(allActions)} className="bg-primary-200 p-2 rounded-xl">Save</button>
+                </TableBody>
+            </Table>
+            <Button onClick={() => handleUpdateActions(allActions)} className="my-4">Save</Button>
         </div>
     )
 }
 
 function ActionTableHeader() {
     return (
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Is Tailgating</th>
-                <th>Enable/Disable</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
+        <TableHeader>
+            <TableRow>
+                <TableHead>Id</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Is Tailgating</TableHead>
+                <TableHead>Enabled</TableHead>
+                <TableHead>Delete</TableHead>
+            </TableRow>
+        </TableHeader>
     )
 }
     
 
-function ActionRow({ action, handleNameChange, handleIsTailgatingChange, handleToggle, setShowModal, setDeleteActionId }) {
+function ActionRow({ action, handleNameChange, handleIsTailgatingChange, handleToggle, handleDelete }) {
     return (
-        <tr>
-            <td>{action.id}</td>
-            <td><input value={action.name} onChange={(e) => handleNameChange(action.id, e.target.value)}></input></td>
-            <td><input type="checkbox" checked={action.is_tailgating ? true : false} onChange={(e) => handleIsTailgatingChange(action.id)}></input></td>
-            <td><ToggleEnable action={action} handleToggle={handleToggle}/></td>
-            <td><DeleteButton action={action} setShowModal={setShowModal} setDeleteActionId={setDeleteActionId}/></td>
-        </tr>
+        <TableRow>
+            <TableCell>{action.id}</TableCell>
+            <TableCell><Input value={action.name} onChange={(e) => handleNameChange(action.id, e.target.value)}></Input></TableCell>
+            <TableCell><Checkbox checked={action.is_tailgating ? true : false} onCheckedChange={(e) => handleIsTailgatingChange(action.id)}></Checkbox></TableCell>
+            <TableCell><ToggleEnable action={action} handleToggle={handleToggle}/></TableCell>
+            <TableCell><DeleteButton action={action} handleDelete={handleDelete}/></TableCell>
+        </TableRow>
     )
 }
 
 function ToggleEnable({ action, handleToggle }) {
     return (        
         <div className="inline-flex items-center cursor-pointer">
-            <input type="checkbox" checked={action.is_enabled ? true : false} onChange={() => handleToggle(action.id)}></input>
+            <Checkbox checked={action.is_enabled ? true : false} onCheckedChange={() => handleToggle(action.id)}></Checkbox>
         </div>
         )
     }
 
-function DeleteButton({ action, setShowModal, setDeleteActionId }) {
+function DeleteButton({ action, handleDelete }) {
     return (
-        <button className="bg-primary-200 p-2 rounded-xl" onClick={() => {
-            setShowModal(true)
-            setDeleteActionId(action.id)
-        }}>Delete</button>
-    )
-}
-
-function ActionConfirmModal({ actionId, setShowModal, handleDelete }) {
-    return (
-        <Modal title="Warning!" setShowModal={setShowModal}>
-            <ModalContent actionId={actionId} handleDelete={handleDelete}/>
-        </Modal>
-    )
-}
-
-function ModalContent({ actionId, handleDelete }) {
-    return (
-        <div className = "relative p-6 flex-auto border-0 rounded-lg bg-primary-50">
-            <h3 className="font-semibold">This cannot be undone</h3>
-            <button className="bg-primary-200 p-2 rounded-xl" onClick={() => handleDelete(actionId)}>Delete</button>
-        </div>
+        <Button size="sm" onClick={() => handleDelete(action.id)}>Delete</Button>
     )
 }

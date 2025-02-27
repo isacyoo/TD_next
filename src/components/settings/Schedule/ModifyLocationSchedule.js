@@ -48,6 +48,10 @@ export default function WeekSchedule({ locationId, schedule }) {
 	}
 
 	const onSubmit = () => {
+		if (invalidMessage !== "") {
+			alert("Invalid schedule. Please correct the schedule before saving.")
+			return
+		}
 		post(`/schedule/${locationId}`, currentSchedule).then(
 			(res) => {
 				if (res.ok) {

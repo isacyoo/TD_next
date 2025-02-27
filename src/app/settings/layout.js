@@ -4,7 +4,7 @@ export default function SettingsLayout({ children }) {
     return (
         <div className='flex w-full'>
             <SettingsSidebar />
-            <div className='flex justify-center w-1/2'>
+            <div className='flex justify-center w-1/2 m-8'>
                 {children}
             </div>
         </div>
