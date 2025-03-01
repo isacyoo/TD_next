@@ -4,6 +4,17 @@ import { useEffect, useState } from 'react'
 import Modal from "@/components/common/Modal"
 import { post } from "@/util/clientApi"
 
+import { Button } from "@/components/ui/button"
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+  } from "@/components/ui/select"  
+import { Input } from "@/components/ui/input"
+import { toast } from "sonner"
+
 
 export default function WeekSchedule({ locationId, schedule }) {
 	const hours = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11",
@@ -37,11 +48,9 @@ export default function WeekSchedule({ locationId, schedule }) {
 		).then(
 			(data) => {
 				if (!data.input_valid) {
-					setInvalidMessage("Invalid input in the schedule")
+					toast.error("Invalid input in the schedule")
 				} else if (!data.valid) {
-					setInvalidMessage("Invalid schedule")
-				} else {
-					setInvalidMessage("")
+					toast.error("Invalid schedule")
 				}
 			}
 		)
@@ -54,6 +63,7 @@ export default function WeekSchedule({ locationId, schedule }) {
 		}
 		post(`/schedule/${locationId}`, currentSchedule).then(
 			(res) => {
+
 				if (res.ok) {
 					alert("Schedule saved successfully")
 				} else if (res.status == 401 || res.status == 403 || res.status == 422) {
@@ -69,6 +79,15 @@ export default function WeekSchedule({ locationId, schedule }) {
 		checkScheduleValidity(currentSchedule)
 	}
 	, [currentSchedule])
+
+	useEffect(() => {
+		if (!showModal) {
+			setSelectedHour("00")
+			setSelectedMinute("00")
+			setDuration("")
+		}
+	}, [showModal]
+	)
     
     return (
         <div>
@@ -85,8 +104,7 @@ export default function WeekSchedule({ locationId, schedule }) {
 					selectedMinute={selectedMinute} duration={duration} setSelectedHour={setSelectedHour} setSelectedMinute={setSelectedMinute}
 					setDuration={setDuration} hours={hours} minutes={minutes}/>
 			</Modal> : <></>}
-			<div>{invalidMessage}</div>
-			<button onClick={onSubmit}>Save</button>
+			<Button onClick={onSubmit}>Save</Button>
         </div>
     )
 }
@@ -116,8 +134,15 @@ function DaySchedule({ dow, daySchedule, setDaySchedule, setModalConfirmFunction
 	}
 
     return (
-        <div>
-            <h3>{dow}</h3>
+        <div className="border border-solid border-neutral/100 rounded p-4 mb-4">
+			<div className="flex justify-between items-center mb-4">
+				<h3>{dow}</h3>
+				<Button variant="outline" className="ml-4" onClick={() => {
+					setModalConfirmFunction(() => (hour, minute, duration) => addRun(`${hour}:${minute}`, parseFloat(duration)))
+					setShowModal(true)
+				}
+				}>Add run</Button>
+			</div>
             <div>
                 {daySchedule.map((run, index) => {
                     return <SingleRun key={index} run={run} updateRun={() => {
@@ -129,11 +154,7 @@ function DaySchedule({ dow, daySchedule, setDaySchedule, setModalConfirmFunction
 					}} removeRun={() => removeRun(index)} />
 				})}
             </div>
-			<button onClick={() => {
-				setModalConfirmFunction(() => (hour, minute, duration) => addRun(`${hour}:${minute}`, parseFloat(duration)))
-				setShowModal(true)
-			}
-			}>Add run</button>
+
 
         </div>
     )
@@ -141,11 +162,13 @@ function DaySchedule({ dow, daySchedule, setDaySchedule, setModalConfirmFunction
 
 function SingleRun({ run, updateRun, removeRun }) {
     return (
-        <div>
-            <p>{run.start_time}</p>
-            <p>{run.duration}</p>
-            <button onClick={updateRun}>Update</button>
-            <button onClick={removeRun}>×</button>
+        <div className='border border-solid border-neutral/100 rounded p-4 mb-4'>
+			<div className="flex justify-between items-center">
+				<p><b>Start time: </b>{run.start_time}</p>
+				<Button variant="outline" className="w-6 h-6 p-0" onClick={removeRun}>×</Button>	
+			</div>
+            <p className="my-2"><b>Duration: </b>{run.duration}</p>
+			<Button variant="secondary" onClick={updateRun}>Update</Button>
         </div>
     )
 }
@@ -153,9 +176,19 @@ function SingleRun({ run, updateRun, removeRun }) {
 
 function ModalContent({ closeModal, onConfirm, hours, minutes, selectedHour, selectedMinute, duration, setSelectedHour, setSelectedMinute, setDuration }) {
 	const handleDurationInputChange = (e) => {
-		const value = e.target.value
+		let value = e.target.value
+		if (value.length > 5) {
+			return
+		}
+
+		if (value.endsWith('.')) {
+			if (!value.includes('.')) {
+				value = value.slice(0, -1)
+			}
+		}
+
 		if (value === '' || (!isNaN(value) && parseFloat(value) >= 0 && parseFloat(value) <= 24)) {
-			setDuration(value)
+			setDuration(e.target.value)
 		}
 	}
 
@@ -170,38 +203,41 @@ function ModalContent({ closeModal, onConfirm, hours, minutes, selectedHour, sel
 
     return (
         <>
-			<div className="relative p-6 flex-auto">
-				<label>
-					Hour:
-					<select
-						value={selectedHour}
-						onChange={(e) => setSelectedHour(e.target.value)}
-					>
-						{hours.map((hour) => (
-							<option key={hour} value={hour}>{hour}</option>
-						))}
-					</select>
-				</label>
-				<label>
-					Minute:
-					<select
-						value={selectedMinute}
-						onChange={(e) => setSelectedMinute(e.target.value)}
-					>
-						{minutes.map((minute) => (
-							<option key={minute} value={minute}>{minute}</option>
-						))}
-					</select>
-				</label>
-				<label>
-					Duration:
-					<input
-						type="text"
-						value={duration}
-						onChange={handleDurationInputChange}
-						placeholder="Duration in hours"
-					/>
-				</label>
+			<div className="relative p-6">
+				<div className="flex justify-between items-center my-2">
+					<h3>Select hour</h3>
+					<div className="w-24">
+						<Select value={selectedHour} onValueChange={setSelectedHour}>
+							<SelectTrigger>
+								<SelectValue placeholder="Hours"></SelectValue>
+							</SelectTrigger>
+							<SelectContent>
+								{hours.map((hour) => (
+									<SelectItem key={hour} value={hour}>{hour}</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+				</div>
+				<div className="flex justify-between items-center my-2">
+					<h3>Select minute</h3>
+					<div className="w-24">			
+						<Select value={selectedMinute} onValueChange={setSelectedMinute}>
+							<SelectTrigger>
+								<SelectValue placeholder="Minutes"></SelectValue>
+							</SelectTrigger>
+							<SelectContent>
+								{minutes.map((minute) => (
+									<SelectItem key={minute} value={minute}>{minute}</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+				</div>
+				<div className="flex justify-between items-center my-2">
+					<h3>Duration</h3>
+					<Input className="mx-2" value={duration} onChange={handleDurationInputChange}></Input>
+				</div>
           	</div>
           	<div className="flex items-center justify-end p-6 border-t border-solid border-primary-200 rounded-b">
             	<button

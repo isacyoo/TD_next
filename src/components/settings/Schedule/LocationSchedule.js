@@ -17,7 +17,7 @@ export default async function LocationSchedule({ locationId }) {
     const location = await getLocation(locationId)
     return (
         <div>
-            <h1>{location.name}</h1>
+            <h1 className="font-extrabold text-2xl mb-4">{location.name}</h1>
             <WeekSchedule locationId={locationId} schedule={location.operational_hours} />
         </div>
     )
