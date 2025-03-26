@@ -5,12 +5,6 @@ import { useRouter } from 'next/navigation'
  
 export default function Error({ error, reset }) {
 const redirect = useRouter().push
-
-  useEffect(() => {
-    if (error.message.startsWith('401') || error.message.startsWith('403') || error.message.startsWith('422')) {
-        redirect('/login')
-    }
-  }, [error])
  
   return (
     <div>

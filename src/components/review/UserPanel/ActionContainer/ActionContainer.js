@@ -14,7 +14,7 @@ export default function ActionContainer({ actions, currentAction }) {
     const videoId = pathName.split('/').slice(-1)[0]
 
     const applyActionToVideo = async (videoId, actionId) => {
-        const res = await post(`/api/action_to_video/${videoId}/${actionId}`)
+        const res = await post(`/action_to_video/${videoId}/${actionId}`)
 
         return res.status
     }

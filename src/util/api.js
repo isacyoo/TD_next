@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 function decodeJWT(token) {
     const tokenArray = token.split('.')
@@ -23,7 +24,7 @@ async function renewToken() {
         return
     }
 
-    fetch(`${process.env.API_URL}/api/refresh`, {
+    fetch(`${process.env.API_URL}/refresh`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -42,7 +43,7 @@ export async function fetcher(url) {
     const cookieStore = await cookies()
     renewToken()
     
-    return fetch(`${process.env.API_URL}/api${url}`, {
+    return fetch(`${process.env.API_URL}${url}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${cookieStore.get(process.env.ACCESS_TOKEN_COOKIE_NAME)?.value}`
@@ -52,4 +53,16 @@ export async function fetcher(url) {
 
 export function getSession() {
     return fetcher('/user_info')
+}
+
+export async function isAuthenticated(request) {
+    const accessToken = request.cookies.get(process.env.ACCESS_TOKEN_COOKIE_NAME)?.value
+    const res = await fetch(`${process.env.API_URL}/is_authenticated`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    })
+
+    return res.ok
 }
