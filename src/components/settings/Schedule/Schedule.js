@@ -27,7 +27,7 @@ export default async function Schedule() {
 
 function Location({ location }) {
     return (
-        <div className="bg-secondary/100 p-6 m-8 rounded-xl">
+        <div className="bg-secondary/60 p-6 m-8 rounded-xl">
             <Link href={`/settings/schedule/${location.id}`}>
                 <div className="flex justify-between items-center my-2">
                     <h2 className="font-bold">{location.name}</h2>

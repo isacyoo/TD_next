@@ -28,7 +28,7 @@ export default async function RootLayout({ children }) {
         <main className="flex max-h-screen flex-col items-center justify-between">
           {children}
         </main>
-        <Toaster position="top-center" closeButton={true} duration={10000}/>
+        <Toaster position="top-center" closeButton={true} duration={3000}/>
       </body>
     </html>
   )

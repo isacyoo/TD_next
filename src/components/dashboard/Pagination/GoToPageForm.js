@@ -1,7 +1,8 @@
 'use client'
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-
+import { toast } from "sonner"
+import { Button } from "@/components/ui/button"
 
 export default function GoToPageForm({ locationId, history, pages, currentPage }) {
     const [ goToPage, setGoToPage ] = useState(currentPage)
@@ -12,8 +13,8 @@ export default function GoToPageForm({ locationId, history, pages, currentPage }
         if (goToPageSanityCheck(goToPage)) {
             router.push(`/${locationId}/${history ? 'history' : 'dashboard'}/${goToPage}?${searchParams}`)
         } else {
-            alert("Invalid page!")
-            setGoToPage(undefined)
+            toast.error('Invalid page number')
+            setGoToPage(currentPage)
         }
     }
 
@@ -34,7 +35,7 @@ export default function GoToPageForm({ locationId, history, pages, currentPage }
         <div className="m-2 flex justify-center">
             <div className="flex mx-2 items-center">Go To Page:</div>
             <input className="flex text-center mx-2 rounded-md text-sm w-10 border-primary-900 border-2" onChange={(e) => setGoToPage(e.target.value)} type="number" id="page" name="page" value={goToPage} min="1" max={pages}></input>
-            <button className="rounded-md bg-primary-700 text-primary-100 border-0 inline-block text-base font-medium py-2 px-3 text-center transition-all cursor-pointer align-baseline whitespace-nowrap select-none" onClick={() => onGoToClick(goToPage)}>Go</button>
+            <Button variant="secondary" onClick={() => onGoToClick(goToPage)}>Go</Button>
         </div>
     )
 }

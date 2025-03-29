@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import Modal from "@/components/common/Modal"
 import { post } from "@/util/clientApi"
 
 import { Button } from "@/components/ui/button"
@@ -12,6 +11,16 @@ import {
 	SelectTrigger,
 	SelectValue,
   } from "@/components/ui/select"  
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+  } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 
@@ -30,7 +39,7 @@ export default function WeekSchedule({ locationId, schedule }) {
     const [ currentSchedule, setCurrentSchedule ] = useState(schedule)
     const [ showModal, setShowModal ] = useState(false)
 	const [ modalConfirmFunction, setModalConfirmFunction ] = useState(() => () => {})
-	const [ invalidMessage, setInvalidMessage ] = useState("")
+	const [ scheduleValid, setScheduleValid ] = useState(true)
 
 	const setDaySchedule = (day, newSchedule) => {
 		setCurrentSchedule({...currentSchedule, [day]: newSchedule})
@@ -49,27 +58,31 @@ export default function WeekSchedule({ locationId, schedule }) {
 			(data) => {
 				if (!data.input_valid) {
 					toast.error("Invalid input in the schedule")
+					setScheduleValid(false)
 				} else if (!data.valid) {
 					toast.error("Invalid schedule")
+					setScheduleValid(false)
+				} else {
+					setScheduleValid(true)
 				}
 			}
 		)
 	}
 
 	const onSubmit = () => {
-		if (invalidMessage !== "") {
-			alert("Invalid schedule. Please correct the schedule before saving.")
+		if (!scheduleValid) {
+			toast.error("Schedule is not valid")
 			return
 		}
 		post(`/schedule/${locationId}`, currentSchedule).then(
 			(res) => {
 
 				if (res.ok) {
-					alert("Schedule saved successfully")
+					toast.success("Schedule saved successfully")
 				} else if (res.status == 401 || res.status == 403 || res.status == 422) {
 					throw new Error(res.status)
 				} else {
-					alert("Failed to save schedule. Please try again.")
+					toast.error("Failed to save schedule. Please try again.")
 				}
 			}
 		)
@@ -91,7 +104,7 @@ export default function WeekSchedule({ locationId, schedule }) {
     
     return (
         <div>
-            <div>
+            <div className="container grid sm:grid-cols-1 md:grid-col-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 my-6">
                 {dow.map((day, index) => (
                     <DaySchedule key={index} dow={dowNames[index]} daySchedule={currentSchedule[day]}
 					setDaySchedule={(newSchedule) => setDaySchedule(day, newSchedule)}
@@ -99,11 +112,39 @@ export default function WeekSchedule({ locationId, schedule }) {
 					setSelectedHour={setSelectedHour} setSelectedMinute={setSelectedMinute} setDuration={setDuration}/>
                 ))}
             </div>
-            {showModal ? <Modal title="Edit runs" setShowModal={setShowModal}>
-				<ModalContent closeModal={() => setShowModal(false)} onConfirm={modalConfirmFunction} selectedHour={selectedHour}
-					selectedMinute={selectedMinute} duration={duration} setSelectedHour={setSelectedHour} setSelectedMinute={setSelectedMinute}
-					setDuration={setDuration} hours={hours} minutes={minutes}/>
-			</Modal> : <></>}
+			<Dialog open={showModal} onOpenChange={setShowModal}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Modify run</DialogTitle>
+						<DialogDescription>
+							Select the hour, minute and duration of the run
+						</DialogDescription>
+					</DialogHeader>
+					<ModalContent closeModal={() => setShowModal(false)} onConfirm={modalConfirmFunction} selectedHour={selectedHour}
+						selectedMinute={selectedMinute} duration={duration} setSelectedHour={setSelectedHour} setSelectedMinute={setSelectedMinute}
+						setDuration={setDuration} hours={hours} minutes={minutes}/>
+					<DialogFooter>
+						<DialogClose asChild>
+							<Button type="button" variant="secondary" onClick={() => setShowModal(false)}>
+								Close
+							</Button>
+						</DialogClose>
+						<DialogClose asChild>
+							<Button type="button" onClick={() => {
+								if (duration == '') {
+									toast("Duration cannot be empty")
+									return
+								}
+								modalConfirmFunction(selectedHour, selectedMinute, duration)
+								setShowModal(false)
+							}
+							}>
+								Apply
+							</Button>
+						</DialogClose>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 			<Button onClick={onSubmit}>Save</Button>
         </div>
     )
@@ -194,7 +235,7 @@ function ModalContent({ closeModal, onConfirm, hours, minutes, selectedHour, sel
 
 	const validateInputAndConfirm = (hour, minute, duration) => {
 		if (duration === '') {
-			alert("Duration cannot be empty")
+			toast("Duration cannot be empty")
 		}
 		else {
 			onConfirm(hour, minute, duration)
@@ -239,22 +280,6 @@ function ModalContent({ closeModal, onConfirm, hours, minutes, selectedHour, sel
 					<Input className="mx-2" value={duration} onChange={handleDurationInputChange}></Input>
 				</div>
           	</div>
-          	<div className="flex items-center justify-end p-6 border-t border-solid border-primary-200 rounded-b">
-            	<button
-					className="text-primary-600 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-					type="button"
-					onClick={closeModal}
-            	>
-              		Close
-            	</button>
-            	<button
-              		className="bg-primary-600 text-primary-100 active:bg-primary-900 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg hover:bg-primary-800 outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-					type="button"
-					onClick={() => validateInputAndConfirm(selectedHour, selectedMinute, duration)}
-				>
-              		Apply
-				</button>
-			</div>
         </>
       )
 }

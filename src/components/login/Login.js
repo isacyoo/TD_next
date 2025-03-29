@@ -1,10 +1,18 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+  } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { toast } from 'sonner'
 
-export default function Login() {
-    const [ loginFailed, setLoginFailed ] = useState(false)
-    
+
+export default function Login() {    
     const router = useRouter()
 
     const handleSubmit = async (event) => {
@@ -24,29 +32,33 @@ export default function Login() {
                     router.push('/home')
                     router.refresh()
                 } else {
-                    setLoginFailed(true)
+                    toast.error('Login failed. Please try again.')
                     document.getElementById("login-form").reset()
                     document.getElementById("id").focus()
                 }
             }
         )
     }
+
     return (
-    <div className="my-20">
-        <form id="login-form" className="m-5 max-w-lg bg-gray-400 p-20 rounded-3xl shadow-md flex flex-col items-center" onSubmit={e => handleSubmit(e)}>
-            <h2 className="mb-5">Login</h2>
-            <div className="id">
-            <label className="mb-1 mr-3 font-bold" htmlFor="id">User ID:</label>
-            <input className="p-2 mb-5 rounded-md border-white" type="text" id="id" name="id" placeholder="Enter your User ID" autoFocus></input>
-            </div>
-            <div className="password">
-            <label className="mb-1 mr-3 font-bold" htmlFor="password">Password:</label>
-            <input className="p-2 mb-5 rounded-md border-white"type="password" id="password" name="password" placeholder="Enter your Password"></input>
-            </div>
-            {loginFailed ? <p>Log in failed. Please try again.</p> : ""}
-            <button className="rounded-md bg-blue-500 border-0 inline-block text-base font-medium py-3 px-4 text-center transition-all cursor-pointer align-baseline whitespace-nowrap select-none" type="submit">Login</button>
-        </form>
-    </div>
+        <Card className="my-40">
+            <CardHeader>
+                <CardTitle>Login</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <form id="login-form" className="m-5 p-10" onSubmit={e => handleSubmit(e)}>
+                    <div className="mb-4">
+                        <Label htmlFor="id">User ID:</Label>
+                        <Input type="text" id="id" name="id" placeholder="Enter your User ID" autoFocus></Input>
+                    </div>
+                    <div className="mb-4">
+                        <Label htmlFor="password">Password:</Label>
+                        <Input type="password" id="password" name="password" placeholder="Enter your Password"></Input>
+                    </div>
+                    <Button type="submit">Login</Button>
+                </form>
+            </CardContent>
+        </Card>
     )
 }
     

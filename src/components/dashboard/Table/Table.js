@@ -1,15 +1,16 @@
-import TableHeader from "./TableHeader"
-import TableContent from "./TableContent"
+import DashboardTableHeader from "./TableHeader"
+import DashboardTableContent from "./TableContent"
+import { Table } from '@/components/ui/table'
 
-export default function Table({ events, history, pageValid }) {
+export default function DashboardTable({ events, history, pageValid, params }) {
     
     return (
         <>
             {pageValid ? <></> : <p className="text-center text-2xl">Page number is not valid</p>}
-            <table className="w-full border-collapse table-fixed">
-                <TableHeader history={history}/>
-                <TableContent events={events} history={history}/>
-            </table>
+            <Table>
+                <DashboardTableHeader history={history}/>
+                <DashboardTableContent events={events} history={history} params={params}/>
+            </Table>
         </>
     )
 }

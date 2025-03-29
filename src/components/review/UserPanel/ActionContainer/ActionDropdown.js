@@ -1,7 +1,20 @@
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+
 export default function ActionDropdown({ actions, selectedAction, setSelectedAction }) {
     return (
-    <select className="py-1 px-2 rounded-sm" id="actions" name="actions" onChange={e => setSelectedAction(e.target.value)}>
-        {actions.map((action, i) => <option key={action.id} value={i} disabled={action.deleted}>{action.name}</option>)}
-    </select>
+    <Select value={selectedAction} onValueChange={setSelectedAction}>
+        <SelectTrigger>
+            <SelectValue placeholder="Select action to perform"/>
+        </SelectTrigger>
+        <SelectContent>
+            {actions.map((action, i) => <SelectItem key={action.id} value={action.id} disabled={!action.is_enabled}>{action.name}</SelectItem>)}
+        </SelectContent>
+    </Select>
     )
 }

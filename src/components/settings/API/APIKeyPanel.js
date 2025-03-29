@@ -2,10 +2,19 @@
 
 import { useState } from 'react'
 import { post } from '@/util/clientApi'
-import Modal from '@/components/common/Modal'
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CiMedicalClipboard } from "react-icons/ci";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+  } from "@/components/ui/dialog"
 
 
 export default function APIKeyPanel() {
@@ -46,25 +55,36 @@ function APIResetPanel() {
     return (
         <div>
             <div className="font-bold text-xl my-6">Reset API Key</div>
-            <Button onClick={() => setShowModal(true)}>Reset</Button>
-            {showModal ? <Modal title="Reset API Key" setShowModal={setShowModal}>
-                    <ModalContent setShowModal={setShowModal} handleReset={handleReset} />
-                </Modal> : <></>}
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button>Reset API Key</Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Reset API Key</DialogTitle>
+                        <DialogDescription>
+                            Are you sure you want to reset your API key? This will revoke your current API key and generate a new one.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <p>Are you sure you want to reset your API key?</p>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button type="button" variant="secondary" onClick={() => setShowModal(false)}>
+                                Close
+                            </Button>
+                        </DialogClose>
+                        <DialogClose asChild>
+                            <Button type="button" onClick={handleReset}>
+                                Reset
+                            </Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
             {newApiKey && <ShowAPIKey handleCopy={handleCopy} hoverMessage={hoverMessage} expiryDate={expiryDate}/>}
         </div>
     )
 }
-
-function ModalContent({ setShowModal, handleReset}) {
-    return (
-        <div className="relative p-6 flex-auto border-0 rounded-lg">
-            <p>Are you sure you want to reset your API key?</p>
-            <Button className="m-2" onClick={() => setShowModal(false)}>Cancel</Button>
-            <Button className="m-2" onClick={handleReset}>Reset</Button>
-        </div>
-    )
-}
-
 
 function ShowAPIKey({ handleCopy, hoverMessage, expiryDate }) {
     return (

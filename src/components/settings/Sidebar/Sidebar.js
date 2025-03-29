@@ -1,25 +1,55 @@
 import Link from 'next/link'
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+  } from "@/components/ui/sidebar"
+
+import { LuMousePointerClick, LuCalendar, LuKeyRound } from "react-icons/lu";
 
 export default function SettingsSidebar() {
+
+    const items = [
+        {
+            title: "Actions",
+            url: "/settings/actions",
+            icon: LuMousePointerClick,
+        },
+        {
+            title: "Schedule",
+            url: "/settings/schedule",
+            icon: LuCalendar,
+        },
+        {
+            title: "API Key",
+            url: "/settings/api",
+            icon: LuKeyRound ,
+        },
+      ]
     return (
-        <div className='bg-primary-500 bg-linear-to-r text-primary-100 h-screen px-4'>
-            <ul className='mt-2'>
-                <li className='py-3 border-b border-primary-900 text-l font-extrabold'>
-                    Settings
-                </li>
-                <li className='py-3 px-2 border-b border-primary-900 text-l font-semibold'>
-                    Manage
-                </li>
-                <li className='py-3 px-10 border-b border-primary-900 font-light hover:bg-primary-700 duration-150'>
-                    <Link href='/settings/actions'>Actions</Link>
-                </li>
-                <li className='py-3 px-10 border-b border-primary-900 font-light hover:bg-primary-700 duration-150'>
-                    <Link href='/settings/schedule'>Schedule</Link>
-                </li>
-                <li className='py-3 px-10 border-b border-primary-900 font-light hover:bg-primary-700 duration-150'>
-                    <Link href='/settings/api'>Manage API key</Link>
-                </li>                
-            </ul>
-        </div>
+        <Sidebar variant="floating">
+            <SidebarContent>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Manage</SidebarGroupLabel>
+                    <SidebarGroupContent>  
+                        <SidebarMenu>
+                            {items.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <Link href={item.url} className="flex items-center">
+                                        <item.icon className="mr-2" />
+                                        {item.title}
+                                    </Link>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+            </SidebarContent>
+        </Sidebar>
     )
 }

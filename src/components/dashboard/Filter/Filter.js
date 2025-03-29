@@ -1,14 +1,27 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import Modal from '@/components/common/Modal'
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from '@/components/ui/label'
 
-const allTimes = ['', '12h','1d', '2d', '5d', '1w','2w']
+const allTimes = ['', '12h','1d', '2d', '5d', '1w','2w', '4w']
 
 export default function Filter({ actions, locationId, history}) {
     const currentSearchParams = useSearchParams()
-    const actionNames = Object.keys(actions)
-    const actionIds = Object.values(actions)
+    const actionNames = actions.map(action => action.name)
+    const actionIds = actions.map(action => action.id)
     const currentChecked = Array(actionNames.length).fill(false).map((_, i) => currentSearchParams.getAll('actionId').includes(actionIds[i].toString()))
     const [ showModal, setShowModal ] = useState(false)
     const [ personId, setPersonId ] = useState(currentSearchParams.has('personId') ? currentSearchParams.get('personId') : '' )
@@ -17,6 +30,11 @@ export default function Filter({ actions, locationId, history}) {
     const [ currentURL, setCurrentURL ] = useState(usePathname())
     const router = useRouter()
     
+    const clearAllFilters = () => {
+        setPersonId('')
+        setTimeSelected(allTimes[0])
+        setActionsChecked(Array(actionNames.length).fill(false))
+    }
 
     const actionCheckboxHandler = (i) => {
         let newActionsChecked = [...actionsChecked]
@@ -57,37 +75,51 @@ export default function Filter({ actions, locationId, history}) {
     }, [personId, timeSelected, actionsChecked])
 
     return (
-      <>
-        <button
-          onClick={() => setShowModal(true)}
-          className="block text-primary-900 bg-primary-100 hover:ring-4 focus:ring-4 focus:outline-none focus:ring-primary-500 font-semibold rounded-lg text-sm px-5 py-2.5 text-center my-4"
-          type="button"
-        >
-          Apply Filters
-        </button>
-        {showModal ? (
-          <Modal title="Apply filters" setShowModal={setShowModal}>
+        <Dialog open={showModal} onOpenChange={setShowModal}>
+            <DialogTrigger asChild>
+                <Button className="my-4">Apply Filters</Button>
+            </DialogTrigger>
+            <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Apply filters</DialogTitle>
+                <DialogDescription>
+                Apply filters to the current view
+                </DialogDescription>
+            </DialogHeader>
             <ModalContent
-              personId={personId}
-              setPersonId={setPersonId}
-              timeSelected={timeSelected}
-              setTimeSelected={setTimeSelected}
-              actionsChecked={actionsChecked}
-              actionCheckboxHandler={actionCheckboxHandler}
-              actionNames={actionNames}
-              setShowModal={setShowModal}
-              history={history}
-              filterButtonHandler={filterButtonHandler}
-            />
-          </Modal>
-        ) : <></>}
-      </>
+                personId={personId}
+                setPersonId={setPersonId}
+                timeSelected={timeSelected}
+                setTimeSelected={setTimeSelected}
+                actionsChecked={actionsChecked}
+                actionCheckboxHandler={actionCheckboxHandler}
+                actionNames={actionNames}
+                history={history}
+                clearAllFilters={clearAllFilters}
+                />
+            <DialogFooter className="sm:justify-start">
+                <DialogClose asChild>
+                <Button type="button" variant="secondary">
+                    Close
+                </Button>
+                </DialogClose>
+                <DialogClose asChild>
+                <Button type="button" onClick={() => {
+                    filterButtonHandler()
+                    setShowModal(false)
+                }}>
+                    Apply
+                </Button>
+                </DialogClose>
+            </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }
 
 function MemberIdFilter({ personId, setPersonId }) {
     return (
-        <input type="text" placeholder="Filter by Member ID" value={personId} onChange={(e) => setPersonId(e.target.value)} className="border-2 border-primary-200 rounded-lg p-2 w-full mb-4"/>
+        <Input type="text" placeholder="Filter by Member ID" value={personId} onChange={(e) => setPersonId(e.target.value)} className="border-2 border-primary-200 rounded-lg p-2 w-full mb-4"/>
     )
 }
 
@@ -111,7 +143,12 @@ function ActionFilter({ actionsChecked, actionCheckboxHandler, actionNames }) {
             </div>
             <div className='flex flex-col'>
             {actionNames.map(
-                (act, i) => (<div className='flex' key={i}><input type="checkbox" checked={actionsChecked[i]} id={"action-"+(i)} value={act} key={act} onChange={() => {actionCheckboxHandler(i)}} className='mr-3'/><label htmlFor={"action-"+(i)}>{act}</label></div>)
+                (act, i) => (
+                    <div className='flex mt-2 items-center' key={i}>
+                        <Checkbox key={i} checked={actionsChecked[i]} id={"action-"+(i)} onCheckedChange={() => {actionCheckboxHandler(i)}} className='mr-3'/>
+                        <Label htmlFor={"action-"+(i)} className='text-sm'>{act}</Label>
+                    </div>
+                )
                 )
             }
             </div>
@@ -119,36 +156,13 @@ function ActionFilter({ actionsChecked, actionCheckboxHandler, actionNames }) {
     )
 }
 
-function ApplyButton({ setShowModal, filterButtonHandler }) {
+function ModalContent({ personId, setPersonId, timeSelected, setTimeSelected, actionsChecked, actionCheckboxHandler, actionNames, history, clearAllFilters }) {
     return (
-        <div className="flex items-center justify-end p-6 border-t border-solid border-primary-200 rounded-b">
-          <button
-            className="text-primary-600 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-            type="button"
-            onClick={() => setShowModal(false)}
-          >
-            Close
-          </button>
-          <button
-            className="bg-primary-600 text-primary-100 active:bg-primary-900 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg hover:bg-primary-800 outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-            type="button"
-            onClick={() => filterButtonHandler()}
-          >
-            Apply
-          </button>
+        <div>
+            <Button variant="secondary" className="my-4" onClick={clearAllFilters}>Clear Filters</Button>
+            <MemberIdFilter personId={personId} setPersonId={setPersonId} />
+            <TimeFilter timeSelected={timeSelected} setTimeSelected={setTimeSelected} />
+            { history ? <ActionFilter actionsChecked={actionsChecked} actionCheckboxHandler={actionCheckboxHandler} actionNames={actionNames} /> : <></> }
         </div>
-    )
-}
-
-function ModalContent({ personId, setPersonId, timeSelected, setTimeSelected, actionsChecked, actionCheckboxHandler, actionNames, setShowModal, history, filterButtonHandler }) {
-    return (
-        <>
-          <div className="relative p-6 flex-auto border-0 rounded-lg bg-primary-50">
-              <MemberIdFilter personId={personId} setPersonId={setPersonId} />
-              <TimeFilter timeSelected={timeSelected} setTimeSelected={setTimeSelected} />
-              { history ? <ActionFilter actionsChecked={actionsChecked} actionCheckboxHandler={actionCheckboxHandler} actionNames={actionNames} /> : <></> }
-          </div>
-          <ApplyButton setShowModal={setShowModal} filterButtonHandler={filterButtonHandler}/>
-        </>
     )
 }

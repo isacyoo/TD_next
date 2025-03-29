@@ -1,7 +1,8 @@
 import { fetcher } from "@/util/api"
 import Filter from './Filter/Filter'
 import Pagination from "./Pagination/Pagination"
-import Table from "./Table/Table"
+import DashboardTable from "./Table/Table"
+import DashboardHeader from "./DashboardHeader"
 
 async function getEvents(url) {
     const res = await fetcher(url)
@@ -29,6 +30,14 @@ async function getActions() {
     throw new Error(res.status)
 }
 
+async function getLocation(locationId) {
+    const res = await fetcher(`/location/${locationId}`)
+    if (res.ok) {
+        return await res.json()
+    }
+    throw new Error(res.status)
+}
+
 export default async function Dashboard({ page, searchParams, locationId, history }) {
     const params = new URLSearchParams()
     if (searchParams) {
@@ -42,21 +51,22 @@ export default async function Dashboard({ page, searchParams, locationId, histor
         }
     }
     if ( history ) {
-        var [ { events, pageValid }, actions ] = await Promise.all([getEvents(`/history_events/${locationId}/${page}?${params}`), getActions()])
+        var [ { events, pageValid }, actions, location ] = await Promise.all([getEvents(`/history_events/${locationId}/${page}?${params}`), getActions(), getLocation(locationId)])
     }
     else {
-        var { events, pageValid } = await getEvents(`/unreviewed_events/${locationId}/${page}?${params}`)
-        var actions = {}
+        var [{ events, pageValid }, location] = await Promise.all([getEvents(`/unreviewed_events/${locationId}/${page}?${params}`), getLocation(locationId)])
+        var actions = []
     }
     
     pageValid = pageValid || events.total == 0
     
     return (
         <div className="w-1/2">
+            <DashboardHeader locationName={location.name} locationId={location.id} history={history}/>
             <Filter actions={actions} locationId={locationId} history={history}></Filter>
             <div>
-            <Table events={events.events} history={history} pageValid={pageValid} />
-            <Pagination currentPage={page} perPage={events.per_page} pages={events.pages} total={events.total} iterPages={events.iter_pages} locationId={locationId} searchParams={searchParams} history={history}/>
+                <DashboardTable events={events.events} history={history} pageValid={pageValid} params={params} />
+                <Pagination currentPage={page} perPage={events.per_page} pages={events.pages} total={events.total} iterPages={events.iter_pages} locationId={locationId} searchParams={searchParams} history={history}/>
             </div>
         </div>
 

@@ -26,20 +26,8 @@ async function getEvent(id) {
     throw new Error(res.status)
 }
 
-async function getAllRelatedVideos(id) {
-    const res = await fetcher(`/all_videos_with_first_entry_video_id/${id}`)
-    if (res.ok) {
-        const { action, videos, location } = await res.json()
-        return { found: true, videos: videos, action: action, locationId: location }
-    }
-    if (res.status=== 400) {
-        return { found: false, videos: [], action: {id: null, name: ''}, locationId: null }
-    }
-    throw new Error(res.status)
-}
-
-async function getAdjacentEvents(id) {
-    const res = await fetcher(`/adjacent_events/${id}`)
+async function getAdjacentEvents(id, params) {
+    const res = await fetcher(`/adjacent_events/${id}?${params}`)
     if (res.ok) {
         return await res.json()
     }
@@ -58,8 +46,19 @@ async function getActions() {
     throw new Error(res.status)
 }
 
-export default async function Review({ id }) {
-    const [ event, adjacentEvents, actions ] = await Promise.all([getEvent(id), getAdjacentEvents(id), getActions()])
+export default async function Review({ id, searchParams }) {
+    const params = new URLSearchParams()
+    if (searchParams) {
+        for (const [key, value] of Object.entries(searchParams)) {
+            if (Array.isArray(value)) {
+                value.map((v) => params.append(key, v))
+            }
+            else {
+                params.append(key, value)
+            }
+        }
+    }
+    const [ event, adjacentEvents, actions ] =  await Promise.all([getEvent(id), getAdjacentEvents(id, params), getActions()])
     if (!event.found) {
         return (
             <div>
@@ -75,9 +74,9 @@ export default async function Review({ id }) {
     const urls = await Promise.all(videoIds.map((video) => getVideoUrl(video.id)))
 
     return (
-        <div className='flex'>
+        <div className='flex my-2'>
             <VideoPanel videoUrls={urls}/>
-            <UserPanel entriesInfo={event.entries} actions={actions} currentAction={event.action} adjacentEvents={adjacentEvents} location={event.location}/>
+            <UserPanel entriesInfo={event.entries} actions={actions} currentAction={event.action} adjacentEvents={adjacentEvents} location={event.location} params={params}/>
         </div>
     )
 }
