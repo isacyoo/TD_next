@@ -2,6 +2,8 @@ import { fetcher } from '@/util/api'
 import Link from 'next/link'
 import { CiStreamOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
+import ScheduleSkeleton from './ScheduleSkeleton';
+import { Suspense } from 'react'
 
 async function getLocations() {
     const res = await fetcher('/locations')
@@ -13,15 +15,23 @@ async function getLocations() {
     }
 }
 
-export default async function Schedule() {
+export default async function ScheuduleWithSuspense() {
+    return (
+        <Suspense fallback={<ScheduleSkeleton />}>
+            <Schedule />
+        </Suspense>
+    )
+}
+
+async function Schedule() {
     const locations = await getLocations()
     return (
-        <div>
+        <>
             <h1 className="font-extrabold text-2xl mb-4">Locations</h1>
             {locations.map(location => (
                 <Location key={location.id} location={location} />
             ))}
-        </div>
+        </>
     )
 }
 
