@@ -46,7 +46,7 @@ async function getActions() {
     throw new Error(res.status)
 }
 
-export default async function Review({ id, searchParams }) {
+export default async function Review({ id, searchParams, showAdjacentEvents }) {
     const params = new URLSearchParams()
     if (searchParams) {
         for (const [key, value] of Object.entries(searchParams)) {
@@ -76,7 +76,7 @@ export default async function Review({ id, searchParams }) {
     return (
         <div className='flex my-2'>
             <VideoPanel videoUrls={urls}/>
-            <UserPanel entriesInfo={event.entries} actions={actions} currentAction={event.action} adjacentEvents={adjacentEvents} location={event.location} params={params}/>
+            <UserPanel entriesInfo={event.entries} actions={actions} currentAction={event.action} adjacentEvents={adjacentEvents} location={event.location} params={params} showAdjacentEvents={showAdjacentEvents}/>
         </div>
     )
 }
