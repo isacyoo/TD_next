@@ -1,4 +1,4 @@
-import PersonInfo from './PersonInfo'
+import MemberInfo from './MemberInfo'
 import {
     Carousel,
     CarouselContent,
@@ -8,7 +8,7 @@ import {
   } from "@/components/ui/carousel"
   
 
-export default function AllPersonInfo({ location, entriesInfo }) {
+export default function AllMemberInfo({ location, entriesInfo }) {
     if (!entriesInfo) {
         return (<></>)
     }
@@ -22,7 +22,7 @@ export default function AllPersonInfo({ location, entriesInfo }) {
             <CarouselContent>
                 {entriesInfo.map((entry, i) => (
                     <CarouselItem key={i} index={i}>
-                        <PersonInfo personInfo={entry} location={location} ></PersonInfo>
+                        <MemberInfo memberInfo={entry} location={location} ></MemberInfo>
                     </CarouselItem>
                 ))}
             </CarouselContent>

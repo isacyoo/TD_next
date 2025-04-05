@@ -18,8 +18,8 @@ function InfoValue({ children }) {
     )
 }
 
-export default function PersonInfo({ personInfo, location }) {
-    const { entered_at, person_id, person_meta } = personInfo
+export default function MemberInfo({ memberInfo, location }) {
+    const { entered_at, member_id, member_meta } = memberInfo
     return (
         <Table>
             <TableBody>
@@ -33,9 +33,9 @@ export default function PersonInfo({ personInfo, location }) {
                 </TableRow>
                 <TableRow>
                     <InfoKey>ID:</InfoKey>
-                    <InfoValue>{person_id}</InfoValue>
+                    <InfoValue>{member_id}</InfoValue>
                 </TableRow>
-                {Object.entries(person_meta).map((md, i) => (
+                {Object.entries(member_meta).map((md, i) => (
                                     <TableRow key={i}>
                                         <InfoKey>{md[0]}:</InfoKey>
                                         <InfoValue>{md[1]}</InfoValue>

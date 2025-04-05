@@ -24,14 +24,14 @@ export default function Filter({ actions, locationId, history}) {
     const actionIds = actions.map(action => action.id)
     const currentChecked = Array(actionNames.length).fill(false).map((_, i) => currentSearchParams.getAll('actionId').includes(actionIds[i].toString()))
     const [ showModal, setShowModal ] = useState(false)
-    const [ personId, setPersonId ] = useState(currentSearchParams.has('personId') ? currentSearchParams.get('personId') : '' )
+    const [ memberId, setMemberId ] = useState(currentSearchParams.has('memberId') ? currentSearchParams.get('memberId') : '' )
     const [ actionsChecked, setActionsChecked ] = useState(currentChecked)
     const [ timeSelected, setTimeSelected ] = useState(currentSearchParams.has('time') ? currentSearchParams.get('time') : allTimes[0])
     const [ currentURL, setCurrentURL ] = useState(usePathname())
     const router = useRouter()
     
     const clearAllFilters = () => {
-        setPersonId('')
+        setMemberId('')
         setTimeSelected(allTimes[0])
         setActionsChecked(Array(actionNames.length).fill(false))
     }
@@ -45,8 +45,8 @@ export default function Filter({ actions, locationId, history}) {
 
     const buildSearchParams = () => {
         let searchParams = new URLSearchParams()
-        if (personId) {
-            searchParams.append('personId', personId)
+        if (memberId) {
+            searchParams.append('memberId', memberId)
         }
         if (timeSelected) {
             searchParams.append('time', timeSelected)
@@ -72,7 +72,7 @@ export default function Filter({ actions, locationId, history}) {
     }
     useEffect(() => {
         setCurrentURL(buildURL())
-    }, [personId, timeSelected, actionsChecked])
+    }, [memberId, timeSelected, actionsChecked])
 
     return (
         <Dialog open={showModal} onOpenChange={setShowModal}>
@@ -87,8 +87,8 @@ export default function Filter({ actions, locationId, history}) {
                 </DialogDescription>
             </DialogHeader>
             <ModalContent
-                personId={personId}
-                setPersonId={setPersonId}
+                memberId={memberId}
+                setMemberId={setMemberId}
                 timeSelected={timeSelected}
                 setTimeSelected={setTimeSelected}
                 actionsChecked={actionsChecked}
@@ -117,9 +117,9 @@ export default function Filter({ actions, locationId, history}) {
     )
 }
 
-function MemberIdFilter({ personId, setPersonId }) {
+function MemberIdFilter({ memberId, setMemberId }) {
     return (
-        <Input type="text" placeholder="Filter by Member ID" value={personId} onChange={(e) => setPersonId(e.target.value)} className="border-2 border-primary-200 rounded-lg p-2 w-full mb-4"/>
+        <Input type="text" placeholder="Filter by Member ID" value={memberId} onChange={(e) => setMemberId(e.target.value)} className="border-2 border-primary-200 rounded-lg p-2 w-full mb-4"/>
     )
 }
 
@@ -156,11 +156,11 @@ function ActionFilter({ actionsChecked, actionCheckboxHandler, actionNames }) {
     )
 }
 
-function ModalContent({ personId, setPersonId, timeSelected, setTimeSelected, actionsChecked, actionCheckboxHandler, actionNames, history, clearAllFilters }) {
+function ModalContent({ memberId, setMemberId, timeSelected, setTimeSelected, actionsChecked, actionCheckboxHandler, actionNames, history, clearAllFilters }) {
     return (
         <div>
             <Button variant="secondary" className="my-4" onClick={clearAllFilters}>Clear Filters</Button>
-            <MemberIdFilter personId={personId} setPersonId={setPersonId} />
+            <MemberIdFilter memberId={memberId} setMemberId={setMemberId} />
             <TimeFilter timeSelected={timeSelected} setTimeSelected={setTimeSelected} />
             { history ? <ActionFilter actionsChecked={actionsChecked} actionCheckboxHandler={actionCheckboxHandler} actionNames={actionNames} /> : <></> }
         </div>
