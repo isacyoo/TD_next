@@ -4,13 +4,13 @@ import { Switch } from "@/components/ui/switch"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import { post } from "@/util/clientApi"
+import { clientFetch } from "@/util/clientApi"
 
 export default function HighRiskMembersReviewSetting({ reviewHighRiskMembers}) {
     const [ isEnabled, setIsEnabled ] = useState(reviewHighRiskMembers)
 
     const handleSave = async () => {
-        const res = await post('/user_settings', { review_high_risk_members: isEnabled })
+        const res = await clientFetch('POST', '/user_settings', { review_high_risk_members: isEnabled })
         if (res.ok) {
             toast.success('Settings saved')
         }

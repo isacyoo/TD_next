@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { post } from '@/util/clientApi'
+import { clientFetch } from '@/util/clientApi'
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CiMedicalClipboard } from "react-icons/ci";
@@ -41,7 +41,7 @@ function APIResetPanel() {
 
     const handleReset = async () => {
         setShowModal(false)
-        const res = await post('/reset_api_key')
+        const res = await clientFetch('POST', '/reset_api_key')
         if (res.ok) {
             const apiKey = await res.json()
             setNewApiKey(apiKey.api_key)

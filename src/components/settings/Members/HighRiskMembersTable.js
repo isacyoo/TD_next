@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { post } from '@/util/clientApi'
+import { clientFetch } from '@/util/clientApi'
 import { useRouter } from 'next/navigation'
 import {
     Table,
@@ -57,7 +57,7 @@ export default function HighRiskMembersTable({ members }) {
             return
         }
 
-        post("/update_high_risk_members", { members: allMembers })
+        clientFetch('POST', "/update_high_risk_members", { members: allMembers })
             .then(res => {
                 if (res.ok) {
                     toast.success("High risk members updated successfully")

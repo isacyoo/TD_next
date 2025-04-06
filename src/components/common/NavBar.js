@@ -2,14 +2,14 @@
 import React from 'react';
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation';
-import { post } from '@/util/clientApi'
+import { clientFetch } from '@/util/clientApi'
 
 
 export default function NavBar({ session }) {
     const router = useRouter()
 
     const logout = () => {
-        post('/logout').then(() => {
+        clientFetch('POST', '/logout').then(() => {
             router.push('/login')
         })
     }

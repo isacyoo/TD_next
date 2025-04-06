@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { post } from "@/util/clientApi"
+import { clientFetch } from "@/util/clientApi"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -46,7 +46,7 @@ export default function WeekSchedule({ locationId, schedule }) {
 	}
 
 	const checkScheduleValidity = (newSchedule) => {
-		post("/validate_schedule", newSchedule).then(
+		clientFetch('POST', "/validate_schedule", newSchedule).then(
 			(res) => {
 				if (res.ok) {
 					return res.json()
@@ -74,7 +74,7 @@ export default function WeekSchedule({ locationId, schedule }) {
 			toast.error("Schedule is not valid")
 			return
 		}
-		post(`/schedule/${locationId}`, currentSchedule).then(
+		clientFetch('POST', `/schedule/${locationId}`, currentSchedule).then(
 			(res) => {
 
 				if (res.ok) {

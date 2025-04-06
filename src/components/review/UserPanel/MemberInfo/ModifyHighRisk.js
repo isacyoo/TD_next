@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { post, del } from "@/util/clientApi"
+import { clientFetch } from "@/util/clientApi"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { LuCirclePlus, LuCircleMinus } from "react-icons/lu";
@@ -10,7 +10,7 @@ export default function ModifyHighRisk({ memberId, highRisk }) {
     const [ isHighRisk, setIsHighRisk ] = useState(highRisk)
 
     const addHighRisk = async () => {
-        const res = await post(`/high_risk_member/${memberId}`)
+        const res = await clientFetch('POST', `/high_risk_member/${memberId}`)
         if (res.ok) {
             setIsHighRisk(true)
             toast.success("Added high risk member")
@@ -19,7 +19,7 @@ export default function ModifyHighRisk({ memberId, highRisk }) {
         }
     }
     const removeHighRisk = async () => {
-        const res = await del(`/high_risk_member/${memberId}`)
+        const res = await clientFetch('DELETE', `/high_risk_member/${memberId}`)
         if (res.ok) {
             setIsHighRisk(false)
             toast.success("Removed high risk member")

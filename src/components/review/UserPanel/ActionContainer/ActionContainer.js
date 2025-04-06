@@ -3,7 +3,7 @@ import { use, useState, useEffect } from 'react'
 import ActionDropdown from "./ActionDropdown"
 import ActionConfirmModal from './ActionConfirmModal'
 import { usePathname, useRouter } from 'next/navigation'
-import { post } from '@/util/clientApi'
+import { clientFetch } from '@/util/clientApi'
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 
@@ -16,7 +16,7 @@ export default function ActionContainer({ actions, currentAction }) {
     const eventId = pathName.split('/').slice(-1)[0]
 
     const applyActionToEvent = async (eventId, actionId) => {
-        const res = await post(`/action_to_event/${eventId}/${actionId}`)
+        const res = await clientFetch('POST', `/action_to_event/${eventId}/${actionId}`)
         return res.status
     }
 

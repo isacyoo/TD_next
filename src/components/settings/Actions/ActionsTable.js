@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { post } from '@/util/clientApi'
+import { clientFetch } from '@/util/clientApi'
 import { useRouter } from 'next/navigation'
 import {
     Table,
@@ -80,7 +80,7 @@ export default function ActionsTable({ actions }) {
             toast.error("Action name must be unique")
             return
         }
-        post('/update_actions', { actions: allActions }).then((res) => {
+        clientFetch('POST', '/update_actions', { actions: allActions }).then((res) => {
         
             if (res.ok) {
                 toast.success("Actions updated")
