@@ -8,7 +8,7 @@ import FilterSkeleton from "./Filter/FilterSkeleton"
 import TableSkeleton from "./Table/TableSkeleton"
 import { DashboardHeaderSkeleton } from "./DashboardHeader"
 
-export default async function Dashboard({ page, searchParams, locationId, history }) {
+export default async function Dashboard({ page, searchParams, locationId, history, fav }) {
     const params = new URLSearchParams()
     if (searchParams) {
         for (const [key, value] of Object.entries(searchParams)) {
@@ -24,13 +24,13 @@ export default async function Dashboard({ page, searchParams, locationId, histor
     return (
         <div className="w-1/2">
             <Suspense fallback={<DashboardHeaderSkeleton />}>
-                <DashboardHeader locationId={locationId} history={history}/>
+                <DashboardHeader locationId={locationId} history={history} fav={fav}/>
             </Suspense>
             <Suspense fallback={<FilterSkeleton />}>
-                <FilterWrapper locationId={locationId} history={history}></FilterWrapper>
+                <FilterWrapper locationId={locationId} history={history} fav={fav}></FilterWrapper>
             </Suspense>
             <Suspense fallback={<TableSkeleton history={history} />}>
-                <DashboardContent history={history} params={params} locationId={locationId} page={page} />
+                <DashboardContent history={history} params={params} locationId={locationId} page={page} fav={fav}/>
             </Suspense>
         </div>
 

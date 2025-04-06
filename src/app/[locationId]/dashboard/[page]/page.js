@@ -4,6 +4,6 @@ export default async function DashboardPage(props) {
     const searchParams = await props.searchParams;
     const params = await props.params;
     return (
-        <Dashboard page={params.page} locationId={params.locationId} searchParams={searchParams} history={false}/>
+        <Dashboard page={params.page} locationId={params.locationId} searchParams={searchParams} history={false} fav={false}/>
     )
 }

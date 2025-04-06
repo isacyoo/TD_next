@@ -11,11 +11,11 @@ async function getActions() {
     throw new Error(res.status)
 }
 
-export default async function FilterWrapper({ locationId, history }) {
+export default async function FilterWrapper({ locationId, history, fav }) {
     const actions = history ? await getActions() : []
 
     return (
-        <Filter actions={actions} locationId={locationId} history={history}/>
+        <Filter actions={actions} locationId={locationId} history={history} fav={fav}/>
     )
 
 }

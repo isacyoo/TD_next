@@ -13,7 +13,7 @@ async function getLocation(locationId) {
     throw new Error(res.status)
 }
 
-export default async function DashboardHeader({ locationId, history }) {
+export default async function DashboardHeader({ locationId, history, fav }) {
     const location = await getLocation(locationId)
     const locationName = location.name
 
@@ -26,11 +26,15 @@ export default async function DashboardHeader({ locationId, history }) {
                         <CiSettings />
                     </Button>
                 </Link>
+
                 <Link href={`/${locationId}/dashboard/1`}>
-                    <Button variant="secondary" className={`${ history ? "" : "border-primary border-2 font-bold"} mr-4 hover:bg-primary/10`}>Review events</Button>
+                    <Button variant="secondary" className={`${ (!history && !fav) ? "border-primary border-2 font-bold" : ""} mr-4 hover:bg-primary/10`}>Review events</Button>
                 </Link>
                 <Link href={`/${locationId}/history/1`}>
-                    <Button variant="secondary" className={`${ history ? "border-primary border-2 font-bold" : ""} hover:bg-primary/10`}>History</Button>
+                    <Button variant="secondary" className={`${ history ? "border-primary border-2 font-bold" : ""} mr-4 hover:bg-primary/10`}>History</Button>
+                </Link>
+                <Link href={`/${locationId}/favourites/1`}>
+                    <Button variant="secondary" className={`${ fav ? "border-primary border-2 font-bold" : ""} hover:bg-primary/10`}>Saved events</Button>
                 </Link>
             </div>
         </div>
@@ -43,8 +47,9 @@ export function DashboardHeaderSkeleton() {
             <Skeleton className="h-[39px] w-1/4"/>
             <div className="flex items-center">
                 <Skeleton className="h-[39px] w-[48px] mr-4"/>
-                <Skeleton className="h-[39px] w-[128px] mr-4"/>
-                <Skeleton className="h-[39px] w-[86px]"/>
+                <Skeleton className="h-[39px] w-[134px] mr-4"/>
+                <Skeleton className="h-[39px] w-[80px] mr-4"/>
+                <Skeleton className="h-[39px] w-[121px]"/>
             </div>
         </div>
     )

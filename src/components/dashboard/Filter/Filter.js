@@ -18,7 +18,7 @@ import { Label } from '@/components/ui/label'
 
 const allTimes = ['', '12h','1d', '2d', '5d', '1w','2w', '4w']
 
-export default function Filter({ actions, locationId, history}) {
+export default function Filter({ actions, locationId, history, fav }) {
     const currentSearchParams = useSearchParams()
     const actionNames = actions.map(action => action.name)
     const actionIds = actions.map(action => action.id)
@@ -62,7 +62,8 @@ export default function Filter({ actions, locationId, history}) {
 
     const buildURL = () => {
         const searchParams = buildSearchParams()
-        const url = `/${locationId}/${history ? 'history' : 'dashboard'}/1`
+        const segment = history ? 'history' : fav ? 'favourites' : 'dashboard'
+        const url = `/${locationId}/${segment}/1`
         return `${url}?${searchParams}`
     }
 
