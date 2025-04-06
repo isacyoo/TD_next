@@ -66,7 +66,7 @@ export default function ActionContainer({ actions, currentAction }) {
     return (
         <div className="my-8 w-full">
             { currentActionName ? <p className="font-bold">Current action: {currentActionName}</p> : "" }
-            <div className='flex my-4 items-start'>
+            <div className='flex my-4 items-center'>
                 <label className="mr-3 py-1 text-nowrap">Choose action:</label>
                 <ActionDropdown actions={actions} selectedAction={selectedAction} setSelectedAction={setSelectedAction}></ActionDropdown>
             </div>

@@ -69,7 +69,7 @@ export default function ActionsTable({ actions }) {
 
     const handleUpdateActions = () => {
         const hasEmptyName = allActions.some(action => action.name === "")
-        const hasDuplicateName = allActions.some((action, index) => allActions.findIndex(a => a.name === action.name) !== index)
+        const hasDuplicateName = allActions.some((action, index) => allActions.findIndex(a => a.name === action.name && !a.is_deleted) !== index && !action.is_deleted)
         
         if (hasEmptyName) {
             toast.error("Action name cannot be empty")

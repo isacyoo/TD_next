@@ -19,7 +19,7 @@ export default function VideoPanel({ videoUrls }) {
     }, [selectedVideo])
 
     return (
-        <div className="w-4/5 ml-2">
+        <div className="sm:w-full md:w-full lg:w-4/5 xl:w-4/5 ml-2">
             {videoUrls.map((url, i) => <VideoPlayer vidRef={videoRefs[i]} active={i==selectedVideo} url={url.url} key={i}></VideoPlayer>)}
             <VideoButtons urls={videoUrls} selectedVideo={selectedVideo} selectVideo={selectVideo}></VideoButtons>
         </div>
