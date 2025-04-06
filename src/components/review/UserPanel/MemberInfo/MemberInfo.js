@@ -4,7 +4,23 @@ import {
     TableCell,
     TableRow,
   } from "@/components/ui/table"
+
+import { fetcher } from "@/util/api"
+import ModifyHighRisk from "./ModifyHighRisk"
   
+
+async function getMemberHighRisk(memberId) {
+    const res = await fetcher(`/high_risk_member/${memberId}`)
+
+    if (res.status == 200) {
+        return true
+    } else if (res.status == 404) {
+        return false
+    } else {
+        return false
+    }
+
+}
 
 function InfoKey({ children }) {
     return (
@@ -18,8 +34,9 @@ function InfoValue({ children }) {
     )
 }
 
-export default function MemberInfo({ memberInfo, location }) {
+export default async function MemberInfo({ memberInfo, location }) {
     const { entered_at, member_id, member_meta } = memberInfo
+    const memberHighRisk = await getMemberHighRisk(member_id)
     return (
         <Table>
             <TableBody>
@@ -33,7 +50,12 @@ export default function MemberInfo({ memberInfo, location }) {
                 </TableRow>
                 <TableRow>
                     <InfoKey>ID:</InfoKey>
-                    <InfoValue>{member_id}</InfoValue>
+                    <InfoValue>
+                        <div className="flex items-center">
+                            <span>{member_id}</span>
+                            <ModifyHighRisk memberId={member_id} highRisk={memberHighRisk} />
+                        </div>
+                    </InfoValue>
                 </TableRow>
                 {Object.entries(member_meta).map((md, i) => (
                                     <TableRow key={i}>

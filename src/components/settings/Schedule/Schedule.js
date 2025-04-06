@@ -27,7 +27,7 @@ async function Schedule() {
     const locations = await getLocations()
     return (
         <>
-            <h1 className="font-extrabold text-2xl mb-4">Locations</h1>
+            <h1 className="font-extrabold text-2xl mb-4">Manage Schedule</h1>
             {locations.map(location => (
                 <Location key={location.id} location={location} />
             ))}

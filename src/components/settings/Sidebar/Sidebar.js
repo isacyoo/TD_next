@@ -10,7 +10,8 @@ import {
     SidebarMenuItem,
   } from "@/components/ui/sidebar"
 
-import { LuMousePointerClick, LuCalendar, LuKeyRound } from "react-icons/lu";
+import { LuMousePointerClick, LuCalendar, LuKeyRound, LuCircleAlert, LuMapPin  } from "react-icons/lu";
+import { CgFileDocument } from "react-icons/cg";
 
 export default function SettingsSidebar() {
 
@@ -19,6 +20,11 @@ export default function SettingsSidebar() {
             title: "Actions",
             url: "/settings/actions",
             icon: LuMousePointerClick,
+        },
+        {
+            title: "Locations",
+            url: "/settings/locations",
+            icon: LuMapPin
         },
         {
             title: "Schedule",
@@ -30,6 +36,16 @@ export default function SettingsSidebar() {
             url: "/settings/api",
             icon: LuKeyRound ,
         },
+        {
+            title: "Members",
+            url: "/settings/members",
+            icon: LuCircleAlert ,
+        },
+        {
+            title: "Compliance",
+            url: "/settings/compliance",
+            icon: CgFileDocument,
+        }
       ]
     return (
         <Sidebar variant="floating">
