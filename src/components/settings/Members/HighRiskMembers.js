@@ -1,6 +1,7 @@
 import { fetcher } from "@/util/api"
 import HighRiskMembersTable from "./HighRiskMembersTable"
 import HighRiskMembersReviewSetting from "./HighRiskMembersReviewSetting"
+import { SettingsH2 } from "@/components/settings/SettingsHeaders"
 
 async function getHighRiskMembers() {
     const res = await fetcher("/high_risk_members")
@@ -28,9 +29,9 @@ export default async function HighRiskMembers() {
 
     return (
         <div className="flex flex-col gap-4">
-            <h1 className="font-bold text-xl">Update high risk members</h1>
+            <SettingsH2>Update high risk members</SettingsH2>
             <HighRiskMembersTable members={members} />
-            <h1 className="font-bold text-xl">Account-level members setting</h1>
+            <SettingsH2>Account-level members setting</SettingsH2>
             <HighRiskMembersReviewSetting reviewHighRiskMembers={reviewHighRiskMembers}/>
         </div>
     )

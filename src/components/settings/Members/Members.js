@@ -1,9 +1,10 @@
 import HighRiskMembers from './HighRiskMembers'
+import { SettingsH1 } from "@/components/settings/SettingsHeaders"
 
 export default async function Members() {
     return (
         <div>
-            <h1 className="font-extrabold text-2xl mb-4">Manage high risk members</h1>
+            <SettingsH1>Manage high risk members</SettingsH1>
             <HighRiskMembers />
         </div>
     )

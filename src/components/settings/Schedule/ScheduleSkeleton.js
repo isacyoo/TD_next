@@ -1,9 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton"
+import { SettingsH1 } from "@/components/settings/SettingsHeaders"
 
 export default function ScheduleSkeleton() {
     return (
         <div>
-            <h1 className="font-extrabold text-2xl">Manage Schedule</h1>
+            <SettingsH1>Manage Schedule</SettingsH1>
             <div>
             {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="flex flex-col">

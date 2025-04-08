@@ -1,9 +1,10 @@
 import APIKeyPanel from './APIKeyPanel'
+import { SettingsH1 } from "@/components/settings/SettingsHeaders"
 
 export default async function API() {
     return (
         <div>
-            <h1 className="font-extrabold text-2xl mb-4">Manage your API Key</h1>
+            <SettingsH1>Manage your API Key</SettingsH1>
             <APIKeyPanel />
         </div>
     )
