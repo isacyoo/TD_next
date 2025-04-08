@@ -11,7 +11,7 @@ import {
   } from "@/components/ui/sidebar"
 
 import { LuMousePointerClick, LuCalendar, LuKeyRound, LuCircleAlert, LuMapPin  } from "react-icons/lu";
-import { CgFileDocument } from "react-icons/cg";
+import { MdAccountCircle } from "react-icons/md";
 
 export default function SettingsSidebar() {
 
@@ -42,9 +42,9 @@ export default function SettingsSidebar() {
             icon: LuCircleAlert ,
         },
         {
-            title: "Compliance",
-            url: "/settings/compliance",
-            icon: CgFileDocument,
+            title: "Account",
+            url: "/settings/account",
+            icon: MdAccountCircle,
         }
       ]
     return (
