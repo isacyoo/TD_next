@@ -80,7 +80,7 @@ export default function ActionsTable({ actions }) {
             toast.error("Action name must be unique")
             return
         }
-        clientFetch('POST', '/update_actions', { actions: allActions }).then((res) => {
+        clientFetch('PUT', '/actions', { actions: allActions }).then((res) => {
         
             if (res.ok) {
                 toast.success("Actions updated")
