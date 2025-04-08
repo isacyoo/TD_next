@@ -9,6 +9,11 @@ import {
     HoverCardContent,
     HoverCardTrigger,
   } from "@/components/ui/hover-card"
+  import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
 
 async function getLocations() {
     const res = await fetcher('/locations')
@@ -57,25 +62,25 @@ function Location({ location }) {
 function UploadMethodIcon({ method }) {
     if (method == "RTSP") {
         return (
-            <HoverCard openDelay={0} closeDelay={0}>
-                <HoverCardTrigger>
+            <Tooltip openDelay={0} closeDelay={0}>
+                <TooltipTrigger>
                     <CiStreamOn />
-                </HoverCardTrigger>
-                <HoverCardContent side="top">
+                </TooltipTrigger>
+                <TooltipContent side="top">
                     <span className="text-xs">Videos generated from RTSP stream directly</span>
-                </HoverCardContent>
-            </HoverCard>
+                </TooltipContent>
+            </Tooltip>
         )
     } else if (method == "UserUpload") {
         return (
-            <HoverCard openDelay={0} closeDelay={0}>
-                <HoverCardTrigger>
+            <Tooltip openDelay={0} closeDelay={0}>
+                <TooltipTrigger>
                     <FaRegUser />
-                </HoverCardTrigger>
-                <HoverCardContent side="top">
+                </TooltipTrigger>
+                <TooltipContent side="top">
                     <span className="text-xs">Videos uploaded by user</span>
-                </HoverCardContent>
-            </HoverCard>
+                </TooltipContent>
+            </Tooltip>
         )
     } else {
         return <></>
@@ -98,13 +103,13 @@ function LocationScheduleMiniBox({ dow, daySchedule }) {
     const initial = dow[0].toUpperCase()
     const hoverMessage = operational ? JSON.stringify(daySchedule, null, 4) : "No schedule"
     return (
-        <HoverCard openDelay={0} closeDelay={0}>
-            <HoverCardTrigger>
+        <Tooltip openDelay={0} closeDelay={0}>
+            <TooltipTrigger>
                 <p className={`text-xs px-2 py-1 m-1 rounded ${operational ? 'bg-green-300' : 'bg-red-300'}`}>{initial}</p>
-            </HoverCardTrigger>
-            <HoverCardContent side="top">
+            </TooltipTrigger>
+            <TooltipContent side="top">
                 <span className="text-xs">{hoverMessage}</span>
-            </HoverCardContent>
-        </HoverCard>
+            </TooltipContent>
+        </Tooltip>
     )    
 }

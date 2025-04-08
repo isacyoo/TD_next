@@ -16,8 +16,8 @@ export default async function AccountSettings() {
     const { video_retention_days, stream_retention_hours } = accountSettings
     return (
         <div>
-            <SettingsH1>Manage account-level configurations</SettingsH1>
-            <Compliance videoRetentionDays={video_retention_days} streamRetentionHours={stream_retention_hours}/>
+            <SettingsH1>Manage account configurations</SettingsH1>
+            <Compliance videoRetentionDays={video_retention_days} streamRetentionHours={stream_retention_hours} type="account"/>
         </div>
     )
 }

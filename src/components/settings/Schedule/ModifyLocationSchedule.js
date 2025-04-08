@@ -206,7 +206,7 @@ function SingleRun({ run, updateRun, removeRun }) {
         <div className='border border-solid border-neutral/100 rounded p-4 mb-4'>
 			<div className="flex justify-between items-center">
 				<p><b>Start time: </b>{run.start_time}</p>
-				<Button variant="outline" className="w-6 h-6 p-0" onClick={removeRun}>×</Button>	
+				<Button variant="outline" size="icon" className="w-6 h-6 p-0 text-xs" onClick={removeRun}>×</Button>	
 			</div>
             <p className="my-2"><b>Duration: </b>{run.duration}</p>
 			<Button variant="secondary" onClick={updateRun}>Update</Button>

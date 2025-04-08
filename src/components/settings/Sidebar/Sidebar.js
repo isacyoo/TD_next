@@ -17,6 +17,11 @@ export default function SettingsSidebar() {
 
     const items = [
         {
+            title: "Account",
+            url: "/settings/account",
+            icon: MdAccountCircle,
+        },
+        {
             title: "Actions",
             url: "/settings/actions",
             icon: LuMousePointerClick,
@@ -32,19 +37,14 @@ export default function SettingsSidebar() {
             icon: LuCalendar,
         },
         {
-            title: "API Key",
-            url: "/settings/api",
-            icon: LuKeyRound ,
-        },
-        {
             title: "Members",
             url: "/settings/members",
             icon: LuCircleAlert ,
         },
         {
-            title: "Account",
-            url: "/settings/account",
-            icon: MdAccountCircle,
+            title: "API Key",
+            url: "/settings/api",
+            icon: LuKeyRound ,
         }
       ]
     return (

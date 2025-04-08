@@ -7,7 +7,13 @@ import { clientFetch } from "@/util/clientApi"
 import { toast } from "sonner"
 import { SettingsH2 } from "@/components/settings/SettingsHeaders"
 
-export default function Compliance({ videoRetentionDays, streamRetentionHours }) {
+export default function Compliance({ videoRetentionDays, streamRetentionHours, locationId }) {
+    if ( videoRetentionDays === null ) {
+        videoRetentionDays = ""
+    }
+    if ( streamRetentionHours === null ) {
+        streamRetentionHours = ""
+    }
     const [ videoRetention, setVideoRetention ] = useState(videoRetentionDays)
     const [ streamRetention, setStreamRetention ] = useState(streamRetentionHours)
     const isNumeric = (string) => /^[0-9]+$/.test(string)
@@ -52,15 +58,16 @@ export default function Compliance({ videoRetentionDays, streamRetentionHours })
             toast.warning("Stream retention hours must be between 0 and 720")
             return
         }
+
+        const body = {}
+        body.video_retention_days = videoRetention !== "" ? videoRetention : null
+        body.stream_retention_hours = streamRetention !== "" ? streamRetention : nulld
         
-        const res = await clientFetch("PUT", "/user_settings", {
-            video_retention_days: videoRetention,
-            stream_retention_hours: streamRetention
-        })
+        const res = await clientFetch("PUT", `/location_settings/${locationId}`, body)
         if (res.ok) {
-            toast.success("Account settings updated successfully")
+            toast.success("Location settings updated successfully")
         } else {
-            throw new Error("Failed to update account settings")
+            throw new Error("Failed to update location settings")
         }
     }
 
