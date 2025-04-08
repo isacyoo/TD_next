@@ -5,6 +5,11 @@ import { clientFetch } from "@/util/clientApi"
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+  } from "@/components/ui/hover-card"
 
 export default function SaveEvent({ eventId, saved }) {
     const [ currentSaved, setCurrentSaved ] = useState(saved)
@@ -19,12 +24,17 @@ export default function SaveEvent({ eventId, saved }) {
             toast.error("Failed to save event")
         }
     }
+
     return (
-        <div className="relative group">
-            <Button sizes="icon" variant="link" onClick={updateSaveStatus}>
-                {button}
-            </Button>
-            <span className="absolute bottom-6 left-4 transform -translate-x-1/2 mb-2 w-max px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">{hoverMessage}</span>
-        </div>
+        <HoverCard openDelay={0} closeDelay={0}>
+            <HoverCardTrigger>
+                <Button sizes="icon" variant="link" onClick={updateSaveStatus}>
+                    {button}
+                </Button>
+            </HoverCardTrigger>
+            <HoverCardContent side="top">
+                <span className="text-xs">{hoverMessage}</span>
+            </HoverCardContent>
+        </HoverCard>
     )
 }

@@ -33,7 +33,7 @@ export default function AllMemberInfo({ location, entriesInfo, saved, eventId })
             <CarouselNext />
         </Carousel>
         <Button variant="secondary" size="sm" className="mt-4">
-            <Link href="/settings/members">
+            <Link href="/settings/members" target='_blank'>
                 View all high risk members
             </Link>
         </Button>

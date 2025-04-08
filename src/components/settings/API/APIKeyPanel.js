@@ -15,7 +15,13 @@ import {
 	DialogTitle,
 	DialogTrigger,
   } from "@/components/ui/dialog"
+  import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+  } from "@/components/ui/hover-card"
 
+import { SettingsH2 } from "@/components/settings/SettingsHeaders"
 
 export default function APIKeyPanel() {
     return (
@@ -54,7 +60,7 @@ function APIResetPanel() {
     }
     return (
         <div>
-            <div className="font-bold text-xl my-6">Reset API Key</div>
+            <SettingsH2 mb={4}>Reset API Key</SettingsH2>
             <Dialog>
                 <DialogTrigger asChild>
                     <Button>Reset API Key</Button>
@@ -95,10 +101,16 @@ function ShowAPIKey({ handleCopy, hoverMessage, expiryDate }) {
             <AlertDescription>The API key will be valid until {expiryDate}</AlertDescription>
             <AlertDescription className="flex items-center text-center">
                 <div className="font-semibold">Copy to clipboard</div>
-                <div className="relative group mx-2">
-                    <button onClick={handleCopy}><CiMedicalClipboard /></button>
-                    <span className="absolute bottom-2 left-2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">{hoverMessage}</span>
-                </div>
+                <HoverCard openDelay={0} closeDelay={0}>
+                    <HoverCardTrigger>
+                        <Button size="icon" variant="link" onClick={handleCopy}>
+                            <CiMedicalClipboard />
+                        </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent side="top">
+                        <span className="text-xs">{hoverMessage}</span>
+                    </HoverCardContent>
+                </HoverCard>
             </AlertDescription>
         </Alert>
     )

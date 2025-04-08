@@ -4,6 +4,11 @@ import { CiStreamOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
 import ScheduleSkeleton from './ScheduleSkeleton';
 import { Suspense } from 'react'
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+  } from "@/components/ui/hover-card"
 
 async function getLocations() {
     const res = await fetcher('/locations')
@@ -37,7 +42,7 @@ async function Schedule() {
 
 function Location({ location }) {
     return (
-        <div className="bg-secondary/60 p-6 m-8 rounded-xl">
+        <div className="bg-secondary/0 p-6 m-8 rounded-xl border-2 border-primary/60 shadow-sm hover:shadow-lg transition-shadow duration-300">
             <Link href={`/settings/schedule/${location.id}`}>
                 <div className="flex justify-between items-center my-2">
                     <h2 className="font-bold">{location.name}</h2>
@@ -52,17 +57,25 @@ function Location({ location }) {
 function UploadMethodIcon({ method }) {
     if (method == "RTSP") {
         return (
-        <div className="relative group">
-            <CiStreamOn />
-            <span className="absolute bottom-2 left-2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">Videos generated from RTSP stream directly</span>
-        </div>
+            <HoverCard openDelay={0} closeDelay={0}>
+                <HoverCardTrigger>
+                    <CiStreamOn />
+                </HoverCardTrigger>
+                <HoverCardContent side="top">
+                    <span className="text-xs">Videos generated from RTSP stream directly</span>
+                </HoverCardContent>
+            </HoverCard>
         )
     } else if (method == "UserUpload") {
         return (
-        <div className="relative group">
-            <FaRegUser />
-            <span className="absolute bottom-2 left-2 transform -translate-x-1/2 mb-2 w-max px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">Videos uploaded by user</span>
-        </div>
+            <HoverCard openDelay={0} closeDelay={0}>
+                <HoverCardTrigger>
+                    <FaRegUser />
+                </HoverCardTrigger>
+                <HoverCardContent side="top">
+                    <span className="text-xs">Videos uploaded by user</span>
+                </HoverCardContent>
+            </HoverCard>
         )
     } else {
         return <></>
@@ -85,10 +98,13 @@ function LocationScheduleMiniBox({ dow, daySchedule }) {
     const initial = dow[0].toUpperCase()
     const hoverMessage = operational ? JSON.stringify(daySchedule, null, 4) : "No schedule"
     return (
-        <div className="relative group">
-            <p className={`text-xs px-2 py-1 m-1 rounded ${operational ? 'bg-green-300' : 'bg-red-300'}`}>{initial}</p>
-            <span className="absolute transform -translate-x-1/2 mb-2 w-max px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">{hoverMessage}</span>
-        </div>
-    )
-    
+        <HoverCard openDelay={0} closeDelay={0}>
+            <HoverCardTrigger>
+                <p className={`text-xs px-2 py-1 m-1 rounded ${operational ? 'bg-green-300' : 'bg-red-300'}`}>{initial}</p>
+            </HoverCardTrigger>
+            <HoverCardContent side="top">
+                <span className="text-xs">{hoverMessage}</span>
+            </HoverCardContent>
+        </HoverCard>
+    )    
 }
