@@ -27,7 +27,7 @@ async function getEvent(id) {
 }
 
 async function getAdjacentEvents(id, params) {
-    const res = await fetcher(`/adjacent_events/${id}?${params}`)
+    const res = await fetcher(`/adjacent-events/${id}?${params}`)
     if (res.ok) {
         return await res.json()
     }

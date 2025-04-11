@@ -16,7 +16,7 @@ export default function ActionContainer({ actions, currentAction }) {
     const eventId = pathName.split('/').slice(-1)[0]
 
     const applyActionToEvent = async (eventId, actionId) => {
-        const res = await clientFetch('POST', `/action_to_event/${eventId}/${actionId}`)
+        const res = await clientFetch('POST', `/action-to-event/${eventId}/${actionId}`)
         return res.status
     }
 

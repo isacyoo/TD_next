@@ -3,7 +3,7 @@ import { fetcher } from "@/util/api"
 import { SettingsH1 } from "@/components/settings/SettingsHeaders"
 
 async function getAccountSetting() {
-    const res = await fetcher('/user_settings')
+    const res = await fetcher('/user-settings')
     if (!res.ok) {
         throw new Error('Failed to fetch account settings')
     }

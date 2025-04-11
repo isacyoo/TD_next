@@ -10,7 +10,7 @@ export default function HighRiskMembersReviewSetting({ reviewHighRiskMembers }) 
     const [ isEnabled, setIsEnabled ] = useState(reviewHighRiskMembers)
 
     const handleSave = async () => {
-        const res = await clientFetch('PUT', '/user_settings', { review_high_risk_members: isEnabled })
+        const res = await clientFetch('PUT', '/user-settings', { review_high_risk_members: isEnabled })
         if (res.ok) {
             toast.success('Settings saved')
         }

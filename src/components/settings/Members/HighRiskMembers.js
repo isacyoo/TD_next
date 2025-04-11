@@ -4,7 +4,7 @@ import HighRiskMembersReviewSetting from "./HighRiskMembersReviewSetting"
 import { SettingsH2 } from "@/components/settings/SettingsHeaders"
 
 async function getHighRiskMembers() {
-    const res = await fetcher("/high_risk_members")
+    const res = await fetcher("/high-risk-members")
     if (res.ok) {
         return await res.json()
     }
@@ -12,7 +12,7 @@ async function getHighRiskMembers() {
 }
 
 async function getUserSettings() {
-    const res = await fetcher("/user_settings")
+    const res = await fetcher("/user-settings")
     if (res.ok) {
         return await res.json()
     }

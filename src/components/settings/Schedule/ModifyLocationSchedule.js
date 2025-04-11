@@ -46,7 +46,7 @@ export default function WeekSchedule({ locationId, schedule }) {
 	}
 
 	const checkScheduleValidity = (newSchedule) => {
-		clientFetch('POST', "/validate_schedule", newSchedule).then(
+		clientFetch('POST', "/validate-schedule", newSchedule).then(
 			(res) => {
 				if (res.ok) {
 					return res.json()

@@ -10,7 +10,7 @@ import ModifyHighRisk from "./ModifyHighRisk"
   
 
 async function getMemberHighRisk(memberId) {
-    const res = await fetcher(`/high_risk_member/${memberId}`)
+    const res = await fetcher(`/high-risk-member/${memberId}`)
 
     if (res.status == 200) {
         return true

@@ -57,7 +57,7 @@ export default function HighRiskMembersTable({ members }) {
             return
         }
 
-        clientFetch('PUT', "/high_risk_members", { members: allMembers })
+        clientFetch('PUT', "/high-risk-members", { members: allMembers })
             .then(res => {
                 if (res.ok) {
                     toast.success("High risk members updated successfully")

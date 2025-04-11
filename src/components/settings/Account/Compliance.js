@@ -53,7 +53,7 @@ export default function Compliance({ videoRetentionDays, streamRetentionHours })
             return
         }
         
-        const res = await clientFetch("PUT", "/user_settings", {
+        const res = await clientFetch("PUT", "/user-settings", {
             video_retention_days: videoRetention,
             stream_retention_hours: streamRetention
         })

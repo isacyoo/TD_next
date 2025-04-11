@@ -21,7 +21,7 @@ export default function LocationNameChange({ locationId, locationName }) {
             toast.error("Location name must be between 1 and 36 characters")
             return
         }
-        const res = await clientFetch("PUT", `/location_settings/${locationId}`, { name })
+        const res = await clientFetch("PUT", `/location-settings/${locationId}`, { name })
         if (res.ok) {
             toast.success("Location name updated successfully")
             router.refresh()

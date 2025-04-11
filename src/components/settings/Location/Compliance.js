@@ -63,7 +63,7 @@ export default function Compliance({ videoRetentionDays, streamRetentionHours, l
         body.video_retention_days = videoRetention !== "" ? videoRetention : null
         body.stream_retention_hours = streamRetention !== "" ? streamRetention : null
         
-        const res = await clientFetch("PUT", `/location_settings/${locationId}`, body)
+        const res = await clientFetch("PUT", `/location-settings/${locationId}`, body)
         if (res.ok) {
             toast.success("Location settings updated successfully")
         } else {

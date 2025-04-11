@@ -15,7 +15,7 @@ export default function ModifyHighRisk({ memberId, highRisk }) {
     const [ isHighRisk, setIsHighRisk ] = useState(highRisk)
 
     const addHighRisk = async () => {
-        const res = await clientFetch('POST', `/high_risk_member/${memberId}`)
+        const res = await clientFetch('POST', `/high-risk-member/${memberId}`)
         if (res.ok) {
             setIsHighRisk(true)
             toast.success("Added high risk member")
@@ -24,7 +24,7 @@ export default function ModifyHighRisk({ memberId, highRisk }) {
         }
     }
     const removeHighRisk = async () => {
-        const res = await clientFetch('DELETE', `/high_risk_member/${memberId}`)
+        const res = await clientFetch('DELETE', `/high-risk-member/${memberId}`)
         if (res.ok) {
             setIsHighRisk(false)
             toast.success("Removed high risk member")

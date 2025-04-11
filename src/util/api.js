@@ -17,12 +17,12 @@ export async function fetcher(url) {
 }
 
 export function getSession() {
-    return fetcher('/user_info')
+    return fetcher('/user-info')
 }
 
 export async function isAuthenticated(request) {
     const accessToken = request.cookies.get(process.env.ACCESS_TOKEN_COOKIE_NAME)?.value
-    const res = await fetch(`${process.env.API_URL}/is_authenticated`, {
+    const res = await fetch(`${process.env.API_URL}/is-authenticated`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${accessToken}`

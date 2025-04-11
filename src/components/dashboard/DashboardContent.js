@@ -4,11 +4,11 @@ import { fetcher } from "@/util/api"
 
 function getEndpoint(locationId, page, history, fav, params) {
     if (history) {
-        return `/history_events/${locationId}/${page}?${params}`
+        return `/history-events/${locationId}/${page}?${params}`
     } else if (fav) {
-        return `/saved_events/${locationId}/${page}?${params}`
+        return `/saved-events/${locationId}/${page}?${params}`
     } else {
-        return `/unreviewed_events/${locationId}/${page}?${params}`
+        return `/unreviewed-events/${locationId}/${page}?${params}`
     }
 } 
 

@@ -47,7 +47,7 @@ function APIResetPanel() {
 
     const handleReset = async () => {
         setShowModal(false)
-        const res = await clientFetch('POST', '/reset_api_key')
+        const res = await clientFetch('POST', '/reset-api-key')
         if (res.ok) {
             const apiKey = await res.json()
             setNewApiKey(apiKey.api_key)

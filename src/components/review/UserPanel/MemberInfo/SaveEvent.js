@@ -16,7 +16,7 @@ export default function SaveEvent({ eventId, saved }) {
     const button = currentSaved ? <FaStar /> : <FaRegStar />
     const hoverMessage = currentSaved ? "Unsave event" : "Save event"
     const updateSaveStatus = async () => {
-        const res = await clientFetch('PUT', `/event_save_status/${eventId}`, { save: !currentSaved })
+        const res = await clientFetch('PUT', `/event-save-status/${eventId}`, { save: !currentSaved })
         if (res.ok) {
             setCurrentSaved(!currentSaved)
             toast.success(currentSaved ? "Removed from saved events" : "Added to saved events")

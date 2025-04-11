@@ -4,7 +4,7 @@ import { Suspense } from 'react'
 import { fetcher } from "@/util/api"
 
 async function getStats() {
-    const res = await fetcher("/current_stats")
+    const res = await fetcher("/current-stats")
     if (res.ok) {
         return await res.json()
     }
