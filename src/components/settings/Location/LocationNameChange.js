@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button"
 import { clientFetch } from "@/util/clientApi"
 import { toast } from "sonner"
 import { SettingsH2 } from "@/components/settings/SettingsHeaders"
+import { useRouter } from "next/navigation"
 
 export default function LocationNameChange({ locationId, locationName }) {
     const [ name, setName ] = useState(locationName)
+    const router = useRouter()
 
     const handleNameChange = (e) => {
         setName(e.target.value)
@@ -22,6 +24,7 @@ export default function LocationNameChange({ locationId, locationName }) {
         const res = await clientFetch("PUT", `/location_settings/${locationId}`, { name })
         if (res.ok) {
             toast.success("Location name updated successfully")
+            router.refresh()
         } else {
             toast.error("Failed to update location name")
         }

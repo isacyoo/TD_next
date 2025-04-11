@@ -84,10 +84,15 @@ export default function ActionsTable({ actions }) {
         
             if (res.ok) {
                 toast.success("Actions updated")
+                return res.json()
             } else {
                 toast.error("Failed to update actions. Please try again")
             }
-        })
+        }).then(
+            (res) => {
+                setAllActions(res)
+            }
+        )
     }
 
     const addAction = () => {
