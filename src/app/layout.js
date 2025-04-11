@@ -1,7 +1,7 @@
 import NavBar from '@/components/common/NavBar'
 import './globals.css'
 import { Inter } from 'next/font/google'
-import { getSession } from '@/util/api'
+import { getSession, fetcher } from '@/util/api'
 import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ['latin'] })
@@ -21,10 +21,21 @@ export default async function RootLayout({ children }) {
       }
     }
   )
+
+  const locations = await fetcher("/locations").then(
+    (res) => {
+      if (res.ok) {
+        return res.json()
+      } else {
+        return []
+      }
+    }
+  )
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NavBar session={session}/>
+        <NavBar session={session} locations={locations}/>
         <main className="flex max-h-screen flex-col items-center justify-between">
           {children}
         </main>

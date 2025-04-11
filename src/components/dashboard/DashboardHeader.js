@@ -18,23 +18,22 @@ export default async function DashboardHeader({ locationId, history, fav }) {
     const locationName = location.name
 
     return (
-        <div className="flex justify-between py-8 mb-4 w-full border-b-primary/60 border-b-2">
-            <h1 className="text-2xl font-bold text-primary">{locationName}</h1>
-            <div>
-                <Link href={`/`}>
-                    <Button variant="icon" className="mr-4 hover:bg-primary/10">
+        <div className="flex justify-between items-center py-8 mb-4 w-full border-b-primary/60 border-b-2">
+            <h1 className="text-2xl font-bold text-primary mr-4">{locationName}</h1>
+            <div className="flex items-center">
+                <Link href={`/settings/locations?locationId=${locationId}`}>
+                    <Button variant="icon" className="my-2 mr-4 hover:bg-primary/10">
                         <CiSettings />
                     </Button>
                 </Link>
-
                 <Link href={`/${locationId}/dashboard/1`}>
-                    <Button variant="secondary" className={`${ (!history && !fav) ? "border-primary border-2 font-bold" : ""} mr-4 hover:bg-primary/10`}>Review events</Button>
+                    <Button variant="secondary" className={`${ (!history && !fav) ? "border-primary border-2 font-bold" : ""} my-2 mr-4 hover:bg-primary/10`}>Review events</Button>
                 </Link>
                 <Link href={`/${locationId}/history/1`}>
-                    <Button variant="secondary" className={`${ history ? "border-primary border-2 font-bold" : ""} mr-4 hover:bg-primary/10`}>History</Button>
+                    <Button variant="secondary" className={`${ history ? "border-primary border-2 font-bold" : ""} my-2 mr-4 hover:bg-primary/10`}>History</Button>
                 </Link>
                 <Link href={`/${locationId}/favourites/1`}>
-                    <Button variant="secondary" className={`${ fav ? "border-primary border-2 font-bold" : ""} hover:bg-primary/10`}>Saved events</Button>
+                    <Button variant="secondary" className={`${ fav ? "border-primary border-2 font-bold" : ""} my-2 hover:bg-primary/10`}>Saved events</Button>
                 </Link>
             </div>
         </div>

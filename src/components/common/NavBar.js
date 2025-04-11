@@ -3,9 +3,11 @@ import React from 'react';
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation';
 import { clientFetch } from '@/util/clientApi'
+import SettingsDropdown from './SettingsDropdown';
+import DashboardDropdown from './DashboardDropdown';
 
 
-export default function NavBar({ session }) {
+export default function NavBar({ session, locations }) {
     const router = useRouter()
 
     const logout = () => {
@@ -20,15 +22,17 @@ export default function NavBar({ session }) {
     }
     return (
         <div className='flex items-center w-auto h-12 p-4 shadow-md'>
-            <Link href ='/home' className='ml-7 text-sm transition-all'>
-                AITreD
+            <Link href ='/home' className='ml-5 font-bold transition-all'>
+                Home
             </Link>
-            <div className='h-7 w-0.5 border-l-2 border-l-primary-900 ml-7'></div>
+            <div className='h-7 w-0.5 border-l-2 border-l-primary-900 mx-7'></div>
+            <DashboardDropdown locations={locations} />
+            <div className='h-7 w-0.5 border-l-2 border-l-primary-900 mx-7'></div>
 
             <div className='flex items-center ml-auto mr-2'>
-                <div className='flex items-center'>Welcome {session?.name} !</div>
-                <div className='h-7 w-0.5 border-l-2 border-l-primary-900 ml-7'></div>
-                <Link href='/settings/actions' className='ml-7 border-'>Settings</Link>
+                <div className='flex items-center hidden md:block'>Welcome {session?.name} !</div>
+                <div className='h-7 w-0.5 border-l-2 border-l-primary-900 mx-7'></div>
+                <SettingsDropdown />
                 <div className='h-7 w-0.5 border-l-2 border-l-primary-900 ml-7'></div>
                 <div className='cursor-pointer ml-7' onClick={() => logout()}>Log Out</div>
             </div>
