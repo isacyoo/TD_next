@@ -5,15 +5,12 @@ import { FaRegUser } from "react-icons/fa";
 import ScheduleSkeleton from './ScheduleSkeleton';
 import { Suspense } from 'react'
 import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-  } from "@/components/ui/hover-card"
-  import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
+
+import { SettingsH1 } from "@/components/settings/SettingsHeaders"
 
 async function getLocations() {
     const res = await fetcher('/locations')
@@ -37,7 +34,7 @@ async function Schedule() {
     const locations = await getLocations()
     return (
         <>
-            <h1 className="font-extrabold text-2xl mb-4">Manage Schedule</h1>
+            <SettingsH1>Manage Schedule</SettingsH1>
             {locations.map(location => (
                 <Location key={location.id} location={location} />
             ))}
@@ -47,7 +44,7 @@ async function Schedule() {
 
 function Location({ location }) {
     return (
-        <div className="bg-secondary/0 p-6 m-8 rounded-xl border-2 border-primary/60 shadow-sm hover:shadow-lg transition-shadow duration-300">
+        <div className="bg-secondary/0 p-6 my-8 rounded-xl border-2 border-primary/20 shadow-sm hover:shadow-lg transition-shadow w-[420px] duration-300">
             <Link href={`/settings/schedule/${location.id}`}>
                 <div className="flex justify-between items-center my-2">
                     <h2 className="font-bold">{location.name}</h2>
