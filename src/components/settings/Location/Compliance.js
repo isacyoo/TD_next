@@ -61,7 +61,7 @@ export default function Compliance({ videoRetentionDays, streamRetentionHours, l
 
         const body = {}
         body.video_retention_days = videoRetention !== "" ? videoRetention : null
-        body.stream_retention_hours = streamRetention !== "" ? streamRetention : nulld
+        body.stream_retention_hours = streamRetention !== "" ? streamRetention : null
         
         const res = await clientFetch("PUT", `/location_settings/${locationId}`, body)
         if (res.ok) {

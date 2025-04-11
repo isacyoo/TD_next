@@ -7,7 +7,7 @@ export default function SettingsLayout({ children }) {
             <SidebarProvider>
                 <SettingsSidebar />
                 <SidebarTrigger />
-                <div className='flex m-8'>
+                <div className='m-8'>
                     {children}
                 </div>
             </SidebarProvider>

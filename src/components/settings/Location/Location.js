@@ -21,14 +21,12 @@ async function getLocations() {
     return data
 }
 
-export default async function LocationsSettings() {
+export default async function LocationsSettings({ locationId }) {
     const locations = await getLocations()
-    console.log(locations)
-
     return (
         <div>
             <SettingsH1>Manage location configurations</SettingsH1>
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion defaultValue={locationId} type="single" collapsible>
                 {locations.map((location) => (
                     <AccordionItem key={location.id} value={location.id}>
                         <AccordionTrigger>
@@ -39,16 +37,16 @@ export default async function LocationsSettings() {
                                 locationId={location.id}
                                 locationName={location.name}
                             />
-                            <Separator className="my-4"/>
+                            <Separator className="my-8"/>
                             <Compliance
                                 videoRetentionDays={location.video_retention_days}
                                 streamRetentionHours={location.stream_retention_hours}
                                 type="location"
                                 locationId={location.id}
                             />
-                            <Separator className="my-4"/>
+                            <Separator className="my-8"/>
                             <LocationScheduleLink locationId={location.id} />
-                            <Separator className="my-4"/>
+                            <Separator className="my-8"/>
                             <LocationHighRisk reviewHighRiskMembers={location.review_high_risk_members} />
                         </AccordionContent>
                     </AccordionItem>

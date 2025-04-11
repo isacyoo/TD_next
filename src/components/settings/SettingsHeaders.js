@@ -1,6 +1,6 @@
 export function SettingsH1({ children }) {
   return (
-    <h1 className="font-extrabold text-2xl mb-4">
+    <h1 className="font-extrabold text-2xl mb-4 w-[500px]">
       {children}
     </h1>
   );
