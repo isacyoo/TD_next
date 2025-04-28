@@ -26,16 +26,16 @@ export default function NavBar({ session, locations }) {
             <Link href ='/home' className='ml-5 font-bold transition-all'>
                 Home
             </Link>
-            <div className='h-7 w-0.5 border-l-2 border-l-primary-900 mx-7'></div>
+            <div className='h-7 w-0.5 border-l-2 border-l-primary/10 mx-7'></div>
             <DashboardDropdown locations={locations} />
-            <div className='h-7 w-0.5 border-l-2 border-l-primary-900 mx-7'></div>
+            <div className='h-7 w-0.5 border-l-2 border-l-primary/10 mx-7'></div>
 
             <div className='flex items-center ml-auto mr-2'>
                 <div className='flex items-center hidden md:block mx-7'>Welcome {session?.name} !</div>
                 <ModeToggle />
-                <div className='h-7 w-0.5 border-l-2 border-l-primary-900 mx-7'></div>
+                <div className='h-7 w-0.5 border-l-2 border-l-primary/10 mx-7'></div>
                 <SettingsDropdown />
-                <div className='h-7 w-0.5 border-l-2 border-l-primary-900 ml-7'></div>
+                <div className='h-7 w-0.5 border-l-2 border-l-primary/10 ml-7'></div>
                 <div className='cursor-pointer ml-7' onClick={() => logout()}>Log Out</div>
             </div>
         </div>

@@ -36,7 +36,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <NextThemesProvider attribute="class">
+        <NextThemesProvider attribute="class" defaultTheme='light'>
           <NavBar session={session} locations={locations}/>
           <main className="flex max-h-screen flex-col items-center justify-between">
             {children}

@@ -34,7 +34,7 @@ export default function GoToPageForm({ locationId, history, pages, currentPage }
     return (
         <div className="m-2 flex justify-center">
             <div className="flex mx-2 items-center">Go To Page:</div>
-            <input className="flex text-center mx-2 rounded-md text-sm w-10 border-primary-900 border-2" onChange={(e) => setGoToPage(e.target.value)} type="number" id="page" name="page" value={goToPage} min="1" max={pages}></input>
+            <input className="flex text-center mx-2 rounded-md text-sm w-10 border-secondary border-2" onChange={(e) => setGoToPage(e.target.value)} type="number" id="page" name="page" value={goToPage} min="1" max={pages}></input>
             <Button variant="secondary" onClick={() => onGoToClick(goToPage)}>Go</Button>
         </div>
     )

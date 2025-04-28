@@ -120,7 +120,7 @@ export default function Filter({ actions, locationId, history, fav }) {
 
 function MemberIdFilter({ memberId, setMemberId }) {
     return (
-        <Input type="text" placeholder="Filter by Member ID" value={memberId} onChange={(e) => setMemberId(e.target.value)} className="border-2 border-primary-200 rounded-lg p-2 w-full mb-4"/>
+        <Input type="text" placeholder="Filter by Member ID" value={memberId} onChange={(e) => setMemberId(e.target.value)} className="mb-4"/>
     )
 }
 
@@ -139,7 +139,7 @@ function TimeFilter({ timeSelected, setTimeSelected }) {
 function ActionFilter({ actionsChecked, actionCheckboxHandler, actionNames }) {
     return (
         <div className='mb-4'>
-            <div className='border-b-primary-200 border-b-2 py-1 my-1'>
+            <div className='border-b-secondary border-b-2 py-1 my-1'>
             Filter by action:
             </div>
             <div className='flex flex-col'>
