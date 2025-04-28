@@ -21,7 +21,7 @@ export default function AllMemberInfo({ location, entriesInfo, saved, eventId })
         <h2 className='text-center mb-3 font-bold'>Event Metadata</h2>
         <Carousel opts={{
             loop: true
-        }}>
+        }} className="w-full">
             <CarouselContent>
                 {entriesInfo.map((entry, i) => (
                     <CarouselItem key={i} index={i}>

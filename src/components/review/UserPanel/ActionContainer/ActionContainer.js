@@ -6,17 +6,21 @@ import { usePathname, useRouter } from 'next/navigation'
 import { clientFetch } from '@/util/clientApi'
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
+import CommentInput from './CommentInput'
 
-export default function ActionContainer({ actions, currentAction }) {
+export default function ActionContainer({ actions, currentAction, comment }) {
     const [ currentActionName, setCurrentActionName ] = useState(currentAction)
     const [ selectedAction, setSelectedAction ] = useState(0)
+    const [ currentComment, setCurrentComment ] = useState(comment)
     const [ showModal, setShowModal ] = useState(false)
     const pathName = usePathname()
     const router = useRouter()
     const eventId = pathName.split('/').slice(-1)[0]
 
     const applyActionToEvent = async (eventId, actionId) => {
-        const res = await clientFetch('POST', `/action-to-event/${eventId}/${actionId}`)
+        const res = await clientFetch('POST', `/action-to-event/${eventId}/${actionId}`, {
+            comment: currentComment
+        })
         return res.status
     }
 
@@ -30,10 +34,6 @@ export default function ActionContainer({ actions, currentAction }) {
     }
 
     const closeAndConfirm = async () => {
-        if (selectedAction == 0) {
-            toast.error('Please select an action to apply')
-            return
-        }
         const res = await applyActionToEvent(eventId, selectedAction)
         if (res == 201) {
             setShowModal(false)
@@ -51,7 +51,13 @@ export default function ActionContainer({ actions, currentAction }) {
     }
 
     const confirmIfHistory = () => {
+        if (selectedAction == 0) {
+            toast.error('Please select an action to apply')
+            setShowModal(false)
+            return
+        }
         if (currentAction) {
+            console.log("2")
             setShowModal(true)
         }
         else {
@@ -70,9 +76,9 @@ export default function ActionContainer({ actions, currentAction }) {
                 <label className="mr-3 py-1 text-nowrap">Choose action:</label>
                 <ActionDropdown actions={actions} selectedAction={selectedAction} setSelectedAction={setSelectedAction}></ActionDropdown>
             </div>
-            <ActionConfirmModal selectedAction={getSelectedActionName(selectedAction)} currentAction={currentActionName} showModal={showModal} setShowModal={setShowModalOnlyIfHistory} closeAndConfirm={()=>closeAndConfirm()}>
-                <Button onClick={()=>confirmIfHistory()} variant="secondary">Confirm Action</Button>
-            </ActionConfirmModal>
+            <CommentInput comment={currentComment} setComment={setCurrentComment}></CommentInput>
+            <ActionConfirmModal selectedAction={getSelectedActionName(selectedAction)} currentAction={currentActionName} showModal={showModal} setShowModal={setShowModalOnlyIfHistory} closeAndConfirm={()=>closeAndConfirm()} />
+            <Button onClick={()=>confirmIfHistory()} variant="secondary">Confirm Action</Button>
         </div>
     )
 }

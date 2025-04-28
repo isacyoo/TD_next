@@ -76,7 +76,7 @@ export default async function Review({ id, searchParams, showAdjacentEvents }) {
     return (
         <div className='flex my-2 sm:flex-col md:flex-col lg:flex-row xl:flex-row'>
             <VideoPanel videoUrls={urls}/>
-            <UserPanel entriesInfo={event.entries} actions={actions} currentAction={event.action} adjacentEvents={adjacentEvents} location={event.location} params={params} showAdjacentEvents={showAdjacentEvents} saved={event.is_saved} eventId={event.id}/>
+            <UserPanel entriesInfo={event.entries} actions={actions} currentAction={event.action} adjacentEvents={adjacentEvents} location={event.location} params={params} showAdjacentEvents={showAdjacentEvents} saved={event.is_saved} eventId={event.id} comment={event.comment}/>
         </div>
     )
 }
