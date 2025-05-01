@@ -1,32 +1,14 @@
-"use client"
-
-import { useState } from "react"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { clientFetch } from "@/util/clientApi"
-import { toast } from "sonner"
 import { SettingsH2 } from "@/components/settings/SettingsHeaders"
-import { useRouter } from "next/navigation"
 
-export default function LocationNameChange({ locationId, locationName }) {
-    const [ name, setName ] = useState(locationName)
-    const router = useRouter()
-
+export default function LocationNameChange({ name, setName }) {
     const handleNameChange = (e) => {
-        setName(e.target.value)
-    }
-
-    const handleSubmit = async (e) => {
-        if (name.length < 1 || name.length > 36) {
-            toast.error("Location name must be between 1 and 36 characters")
-            return
-        }
-        const res = await clientFetch("PUT", `/location-settings/${locationId}`, { name })
-        if (res.ok) {
-            toast.success("Location name updated successfully")
-            router.refresh()
+        const value = e.target.value
+        
+        if (value.length > 50) {
+            setName(value.slice(0, 50))
         } else {
-            toast.error("Failed to update location name")
+            setName(value)
         }
     }
 
@@ -35,7 +17,6 @@ export default function LocationNameChange({ locationId, locationName }) {
             <SettingsH2>Location Name</SettingsH2>
             <div className="flex gap-2 mb-2">
                 <Input id="location-name" value={name} onChange={handleNameChange} />
-                <Button onClick={handleSubmit}>Save</Button>
             </div>
         </div>
     )

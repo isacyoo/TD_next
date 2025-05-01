@@ -19,8 +19,7 @@ import { toast } from "sonner"
 
 export default function ActionsTable({ actions }) {
     const [ allActions, setAllActions ] = useState(actions)
-
-    const router = useRouter()
+    const [ loading, setLoading ] = useState(false)
 
     const handleToggle = (index) => {
         const updatedActions = allActions.map((action, i) => {
@@ -80,7 +79,7 @@ export default function ActionsTable({ actions }) {
             toast.error("Action name must be unique")
             return
         }
-        clientFetch('PUT', '/actions', { actions: allActions }).then((res) => {
+        clientFetch('PUT', '/actions', { actions: allActions }, setLoading).then((res) => {
         
             if (res.ok) {
                 toast.success("Actions updated")
@@ -127,7 +126,7 @@ export default function ActionsTable({ actions }) {
             </Table>
             <div className="flex justify-between my-4">
                 <Button onClick={() => addAction()}variant="secondary">Add</Button>
-                <Button onClick={() => handleUpdateActions()}>Save</Button>
+                <Button onClick={() => handleUpdateActions()} disabled={loading}>Save</Button>
             </div>
         </div>
     )

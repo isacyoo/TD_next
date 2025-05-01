@@ -18,8 +18,7 @@ import {
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
+	DialogTitle
   } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
@@ -40,6 +39,7 @@ export default function WeekSchedule({ locationId, schedule }) {
     const [ showModal, setShowModal ] = useState(false)
 	const [ modalConfirmFunction, setModalConfirmFunction ] = useState(() => () => {})
 	const [ scheduleValid, setScheduleValid ] = useState(true)
+	const [ loading, setLoading ] = useState(false)
 
 	const setDaySchedule = (day, newSchedule) => {
 		setCurrentSchedule({...currentSchedule, [day]: newSchedule})
@@ -50,8 +50,6 @@ export default function WeekSchedule({ locationId, schedule }) {
 			(res) => {
 				if (res.ok) {
 					return res.json()
-				} else {
-					throw new Error(res.status)
 				}
 			}
 		).then(
@@ -74,13 +72,11 @@ export default function WeekSchedule({ locationId, schedule }) {
 			toast.error("Schedule is not valid")
 			return
 		}
-		clientFetch('POST', `/schedule/${locationId}`, currentSchedule).then(
+		clientFetch('POST', `/schedule/${locationId}`, currentSchedule, setLoading).then(
 			(res) => {
 
 				if (res.ok) {
 					toast.success("Schedule saved successfully")
-				} else if (res.status == 401 || res.status == 403 || res.status == 422) {
-					throw new Error(res.status)
 				} else {
 					toast.error("Failed to save schedule. Please try again.")
 				}
@@ -145,7 +141,7 @@ export default function WeekSchedule({ locationId, schedule }) {
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
-			<Button onClick={onSubmit}>Save</Button>
+			<Button onClick={onSubmit} disabled={loading}>Save</Button>
         </div>
     )
 }

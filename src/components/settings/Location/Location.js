@@ -5,12 +5,8 @@ import {
     AccordionTrigger,
   } from "@/components/ui/accordion"
 import { fetcher } from "@/util/api"
-import LocationNameChange from "./LocationNameChange"
-import Compliance from "@/components/settings/Location/Compliance"
 import { SettingsH1 } from "@/components/settings/SettingsHeaders"
-import LocationScheduleLink from "./LocationScheduleLink"
-import { Separator } from "@/components/ui/separator"
-import LocationHighRisk from "./LocationHighRisk"
+import LocationSetting from "./LocationSetting"
 
 async function getLocations() {
     const res = await fetcher("/locations")
@@ -23,6 +19,7 @@ async function getLocations() {
 
 export default async function LocationsSettings({ locationId }) {
     const locations = await getLocations()
+    const locationNames = locations.map((location) => location.name)
     return (
         <div>
             <SettingsH1>Manage location configurations</SettingsH1>
@@ -33,21 +30,7 @@ export default async function LocationsSettings({ locationId }) {
                             {location.name}
                         </AccordionTrigger>
                         <AccordionContent className="p-2">
-                            <LocationNameChange
-                                locationId={location.id}
-                                locationName={location.name}
-                            />
-                            <Separator className="my-8"/>
-                            <Compliance
-                                videoRetentionDays={location.video_retention_days}
-                                streamRetentionHours={location.stream_retention_hours}
-                                type="location"
-                                locationId={location.id}
-                            />
-                            <Separator className="my-8"/>
-                            <LocationScheduleLink locationId={location.id} />
-                            <Separator className="my-8"/>
-                            <LocationHighRisk reviewHighRiskMembers={location.review_high_risk_members} />
+                            <LocationSetting location={location} locationNames={locationNames}/>
                         </AccordionContent>
                     </AccordionItem>
                 ))}

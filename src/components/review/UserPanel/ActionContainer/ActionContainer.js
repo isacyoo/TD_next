@@ -13,6 +13,8 @@ export default function ActionContainer({ actions, currentAction, comment }) {
     const [ selectedAction, setSelectedAction ] = useState(0)
     const [ currentComment, setCurrentComment ] = useState(comment)
     const [ showModal, setShowModal ] = useState(false)
+    const [ loading, setLoading ] = useState(false)
+
     const pathName = usePathname()
     const router = useRouter()
     const eventId = pathName.split('/').slice(-1)[0]
@@ -20,7 +22,7 @@ export default function ActionContainer({ actions, currentAction, comment }) {
     const applyActionToEvent = async (eventId, actionId) => {
         const res = await clientFetch('POST', `/action-to-event/${eventId}/${actionId}`, {
             comment: currentComment
-        })
+        }, setLoading)
         return res.status
     }
 
@@ -40,10 +42,6 @@ export default function ActionContainer({ actions, currentAction, comment }) {
             setCurrentActionName(getSelectedActionName(selectedAction))
             toast.success(`Action ${getSelectedActionName(selectedAction)} has been applied to the event`)
         }
-        else if (res == 401 || res == 403 || res == 422) {
-            alert("Session has expired. Please log in again")
-            router.push('/login')
-        }
         else {
             toast.error('Error has occured while applying action to video. Please refresh and try again')
             setShowModal(false)
@@ -57,7 +55,6 @@ export default function ActionContainer({ actions, currentAction, comment }) {
             return
         }
         if (currentAction) {
-            console.log("2")
             setShowModal(true)
         }
         else {
@@ -78,7 +75,7 @@ export default function ActionContainer({ actions, currentAction, comment }) {
             </div>
             <CommentInput comment={currentComment} setComment={setCurrentComment}></CommentInput>
             <ActionConfirmModal selectedAction={getSelectedActionName(selectedAction)} currentAction={currentActionName} showModal={showModal} setShowModal={setShowModalOnlyIfHistory} closeAndConfirm={()=>closeAndConfirm()} />
-            <Button onClick={()=>confirmIfHistory()} variant="secondary">Confirm Action</Button>
+            <Button onClick={()=>confirmIfHistory()} variant="secondary" disabled={loading}>Confirm Action</Button>
         </div>
     )
 }

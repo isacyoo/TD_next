@@ -10,13 +10,16 @@ import {
     HoverCardContent,
     HoverCardTrigger,
   } from "@/components/ui/hover-card"
+import { set } from "react-hook-form";
 
 export default function SaveEvent({ eventId, saved }) {
     const [ currentSaved, setCurrentSaved ] = useState(saved)
+    const [ loading, setLoading ] = useState(false)
+
     const button = currentSaved ? <FaStar /> : <FaRegStar />
     const hoverMessage = currentSaved ? "Unsave event" : "Save event"
     const updateSaveStatus = async () => {
-        const res = await clientFetch('PUT', `/event-save-status/${eventId}`, { save: !currentSaved })
+        const res = await clientFetch('PUT', `/event-save-status/${eventId}`, { save: !currentSaved }, setLoading)
         if (res.ok) {
             setCurrentSaved(!currentSaved)
             toast.success(currentSaved ? "Removed from saved events" : "Added to saved events")
@@ -28,7 +31,7 @@ export default function SaveEvent({ eventId, saved }) {
     return (
         <HoverCard openDelay={0} closeDelay={0}>
             <HoverCardTrigger>
-                <Button sizes="icon" variant="link" onClick={updateSaveStatus}>
+                <Button sizes="icon" variant="link" onClick={updateSaveStatus} disabled={loading}>
                     {button}
                 </Button>
             </HoverCardTrigger>

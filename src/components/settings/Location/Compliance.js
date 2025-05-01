@@ -1,21 +1,14 @@
-"use client"
-import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { clientFetch } from "@/util/clientApi"
-import { toast } from "sonner"
 import { SettingsH2 } from "@/components/settings/SettingsHeaders"
 
-export default function Compliance({ videoRetentionDays, streamRetentionHours, locationId }) {
-    if ( videoRetentionDays === null ) {
-        videoRetentionDays = ""
+export default function Compliance({ videoRetention, streamRetention, setVideoRetention, setStreamRetention }) {
+    if ( videoRetention === null ) {
+        videoRetention = ""
     }
-    if ( streamRetentionHours === null ) {
-        streamRetentionHours = ""
-    }
-    const [ videoRetention, setVideoRetention ] = useState(videoRetentionDays)
-    const [ streamRetention, setStreamRetention ] = useState(streamRetentionHours)
+    if ( streamRetention === null ) {
+        streamRetention = ""
+    }    
     const isNumeric = (string) => /^[0-9]+$/.test(string)
 
     const handleVideoRetentionChange = (e) => {
@@ -48,59 +41,37 @@ export default function Compliance({ videoRetentionDays, streamRetentionHours, l
         }
     }
 
-    const handleSubmit = async (e) => {
-        if (videoRetention < 0 || videoRetention > 365) {
-            toast.warning("Video retention days must be between 0 and 365")
-            return
-        }
-
-        if (streamRetention < 0 || streamRetention > 720) {
-            toast.warning("Stream retention hours must be between 0 and 720")
-            return
-        }
-
-        const body = {}
-        body.video_retention_days = videoRetention !== "" ? videoRetention : null
-        body.stream_retention_hours = streamRetention !== "" ? streamRetention : null
-        
-        const res = await clientFetch("PUT", `/location-settings/${locationId}`, body)
-        if (res.ok) {
-            toast.success("Location settings updated successfully")
-        } else {
-            throw new Error("Failed to update location settings")
-        }
-    }
-
     return (
         <div>
             <SettingsH2 mb={4}>Compliance</SettingsH2>
-            <Label htmlFor="video-retention" className="block mb-2">
-                Video Retention Days
-            </Label>
-            <Input
-                id="video-retention"
-                value={videoRetention}
-                onChange={handleVideoRetentionChange}
-                className="mb-4"
-                min={0}
-                max={365}
-                placeholder="Enter number of days"
-            />
-            <Label htmlFor="stream-retention" className="block mb-2">
-                Stream Retention Hours
-            </Label>
-            <Input
-                id="stream-retention"
-                value={streamRetention}
-                onChange={handleStreamRetentionChange}
-                className="mb-4"
-                min={0}
-                max={720}
-                placeholder="Enter number of hours"
-            />
-            <Button onClick={handleSubmit}>
-                Save
-            </Button>
+            <div className="flex items-center gap-4">
+                <div>
+                <Label htmlFor="video-retention" className="block mb-2">
+                    Video Retention Days
+                </Label>
+                <Input
+                    id="video-retention"
+                    value={videoRetention}
+                    onChange={handleVideoRetentionChange}
+                    min={0}
+                    max={365}
+                    placeholder="Enter number of days"
+                />
+                </div>
+                <div>
+                <Label htmlFor="stream-retention" className="block mb-2">
+                    Stream Retention Hours
+                </Label>
+                <Input
+                    id="stream-retention"
+                    value={streamRetention}
+                    onChange={handleStreamRetentionChange}
+                    min={0}
+                    max={720}
+                    placeholder="Enter number of hours"
+                />
+                </div>
+            </div>
         </div>
     )
 }

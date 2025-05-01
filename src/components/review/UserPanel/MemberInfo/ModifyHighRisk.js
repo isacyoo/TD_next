@@ -13,9 +13,10 @@ import {
 
 export default function ModifyHighRisk({ memberId, highRisk }) {
     const [ isHighRisk, setIsHighRisk ] = useState(highRisk)
+    const [ loading, setLoading ] = useState(false)
 
     const addHighRisk = async () => {
-        const res = await clientFetch('POST', `/high-risk-member/${memberId}`)
+        const res = await clientFetch('POST', `/high-risk-member/${memberId}`,{}, setLoading)
         if (res.ok) {
             setIsHighRisk(true)
             toast.success("Added high risk member")
@@ -24,7 +25,7 @@ export default function ModifyHighRisk({ memberId, highRisk }) {
         }
     }
     const removeHighRisk = async () => {
-        const res = await clientFetch('DELETE', `/high-risk-member/${memberId}`)
+        const res = await clientFetch('DELETE', `/high-risk-member/${memberId}`,{}, setLoading)
         if (res.ok) {
             setIsHighRisk(false)
             toast.success("Removed high risk member")
@@ -44,7 +45,7 @@ export default function ModifyHighRisk({ memberId, highRisk }) {
     return (
         <HoverCard openDelay={0} closeDelay={0}>
             <HoverCardTrigger>
-                <Button sizes="icon" variant="link" onClick={handleClick}>
+                <Button sizes="icon" variant="link" onClick={handleClick} disabled={loading}>
                     {text}
                 </Button>
             </HoverCardTrigger>

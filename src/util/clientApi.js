@@ -1,6 +1,7 @@
 import { getCookie } from './cookie'
 
-export async function clientFetch(method, url, body={}) {
+export async function clientFetch(method, url, body={}, setLoading=(loading)=>{}) {
+    setLoading(true)
     return fetch(`/api${url}`, {
         method,
         headers: {
@@ -9,5 +10,8 @@ export async function clientFetch(method, url, body={}) {
         },
         body: JSON.stringify(body),
         credentials: 'include'
+    }).then((res) => {
+        setLoading(false)
+        return res
     })
 }

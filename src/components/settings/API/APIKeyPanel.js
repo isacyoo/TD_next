@@ -22,6 +22,7 @@ import {
   } from "@/components/ui/hover-card"
 
 import { SettingsH2 } from "@/components/settings/SettingsHeaders"
+import { toast } from 'sonner'
 
 export default function APIKeyPanel() {
     return (
@@ -36,6 +37,7 @@ function APIResetPanel() {
     const [ newApiKey, setNewApiKey ] = useState("")
     const [ expiryDate, setExpiryDate ] = useState("")
     const [ showModal, setShowModal ] = useState(false)
+    const [ loading, setLoading ] = useState(false)
 
     const handleCopy = async () => {
         await navigator.clipboard.writeText(newApiKey)
@@ -47,15 +49,14 @@ function APIResetPanel() {
 
     const handleReset = async () => {
         setShowModal(false)
-        const res = await clientFetch('POST', '/reset-api-key')
+        const res = await clientFetch('POST', '/reset-api-key', {}, setLoading)
         if (res.ok) {
             const apiKey = await res.json()
             setNewApiKey(apiKey.api_key)
             setExpiryDate(apiKey.expiry_date)
-        } else if (res.status == 401 || res.status == 403 || res.status == 422) {
-            throw new Error(res.status)
+            toast.success("API Key reset successfully")
         } else {
-            alert("An error occurred. Please try again.")
+            toast.error("Error has occured while resetting API Key")
         }
     }
     return (
@@ -63,7 +64,7 @@ function APIResetPanel() {
             <SettingsH2 mb={4}>Reset API Key</SettingsH2>
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button>Reset API Key</Button>
+                    <Button disabled={loading}>Reset API Key</Button>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
@@ -96,7 +97,6 @@ function ShowAPIKey({ handleCopy, hoverMessage, expiryDate }) {
     return (
         <Alert className="my-4">
             <AlertTitle>API Key reset</AlertTitle>
-            <AlertDescription>Your API Key has been reset!</AlertDescription>
             <AlertDescription>The original API Key has been revoked</AlertDescription>
             <AlertDescription>The API key will be valid until {expiryDate}</AlertDescription>
             <AlertDescription className="flex items-center text-center">

@@ -8,9 +8,10 @@ import { clientFetch } from "@/util/clientApi"
 
 export default function HighRiskMembersReviewSetting({ reviewHighRiskMembers }) {
     const [ isEnabled, setIsEnabled ] = useState(reviewHighRiskMembers)
+    const [ loading, setLoading ] = useState(false)
 
     const handleSave = async () => {
-        const res = await clientFetch('PUT', '/user-settings', { review_high_risk_members: isEnabled })
+        const res = await clientFetch('PUT', '/user-settings', { review_high_risk_members: isEnabled }, setLoading)
         if (res.ok) {
             toast.success('Settings saved')
         }
@@ -24,7 +25,7 @@ export default function HighRiskMembersReviewSetting({ reviewHighRiskMembers }) 
                 <span className="mr-4">Always review high-risk members</span>
                 <Switch checked={isEnabled} onCheckedChange={setIsEnabled}/>
             </div>
-            <Button onClick={handleSave}>Save</Button>
+            <Button onClick={handleSave} disabled={loading}>Save</Button>
         </div>
     )
 }

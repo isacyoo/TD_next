@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { clientFetch } from '@/util/clientApi'
-import { useRouter } from 'next/navigation'
 import {
     Table,
     TableBody,
@@ -18,6 +17,7 @@ import { toast } from "sonner"
 
 export default function HighRiskMembersTable({ members }) {
     const [ allMembers, setAllMembers ] = useState(members)
+    const [ loading, setLoading ] = useState(false)
 
     const handleMemberIdChange = (index, memberId) => {
         const updatedMembers = allMembers.map((member, i) => {
@@ -57,7 +57,7 @@ export default function HighRiskMembersTable({ members }) {
             return
         }
 
-        clientFetch('PUT', "/high-risk-members", { members: allMembers })
+        clientFetch('PUT', "/high-risk-members", { members: allMembers }, setLoading)
             .then(res => {
                 if (res.ok) {
                     toast.success("High risk members updated successfully")
@@ -96,7 +96,7 @@ export default function HighRiskMembersTable({ members }) {
             </Table>
             <div className="flex justify-between my-4">
                 <Button onClick={addMember} variant="secondary">Add</Button>
-                <Button onClick={handleUpdateMembers}>Update Members</Button>
+                <Button onClick={handleUpdateMembers} disabled={loading}>Update Members</Button>
             </div>
             
         </div>

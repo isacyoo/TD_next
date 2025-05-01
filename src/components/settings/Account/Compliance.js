@@ -10,6 +10,8 @@ import { SettingsH2 } from "@/components/settings/SettingsHeaders"
 export default function Compliance({ videoRetentionDays, streamRetentionHours }) {
     const [ videoRetention, setVideoRetention ] = useState(videoRetentionDays)
     const [ streamRetention, setStreamRetention ] = useState(streamRetentionHours)
+    const [ loading, setLoading ] = useState(false)
+
     const isNumeric = (string) => /^[0-9]+$/.test(string)
 
     const handleVideoRetentionChange = (e) => {
@@ -56,7 +58,7 @@ export default function Compliance({ videoRetentionDays, streamRetentionHours })
         const res = await clientFetch("PUT", "/user-settings", {
             video_retention_days: videoRetention,
             stream_retention_hours: streamRetention
-        })
+        }, setLoading)
         if (res.ok) {
             toast.success("Account settings updated successfully")
         } else {
@@ -91,7 +93,7 @@ export default function Compliance({ videoRetentionDays, streamRetentionHours })
                 max={720}
                 placeholder="Enter number of hours"
             />
-            <Button onClick={handleSubmit}>
+            <Button onClick={handleSubmit} disabled={loading}>
                 Save
             </Button>
         </div>
