@@ -10,13 +10,16 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from 'sonner'
+import { useState } from 'react'
 
 
 export default function Login() {    
     const router = useRouter()
+    const [ loading, setLoading ] = useState(false)
 
     const handleSubmit = async (event) => {
         event.preventDefault()
+        setLoading(true)
         fetch('/api/login', {
             method: 'POST',
             headers: {
@@ -35,6 +38,7 @@ export default function Login() {
                     toast.error('Login failed. Please try again.')
                     document.getElementById("login-form").reset()
                     document.getElementById("id").focus()
+                    setLoading(false)
                 }
             }
         )
@@ -55,7 +59,7 @@ export default function Login() {
                         <Label htmlFor="password">Password:</Label>
                         <Input type="password" id="password" name="password" placeholder="Enter your Password"></Input>
                     </div>
-                    <Button type="submit">Login</Button>
+                    <Button type="submit" disabled={loading}>Login</Button>
                 </form>
             </CardContent>
         </Card>

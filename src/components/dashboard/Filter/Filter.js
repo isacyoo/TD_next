@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import {
@@ -43,7 +43,7 @@ export default function Filter({ actions, locationId, history, fav }) {
         buildURL()
     }
 
-    const buildSearchParams = () => {
+    const buildSearchParams = useCallback(() => {
         let searchParams = new URLSearchParams()
         if (memberId) {
             searchParams.append('memberId', memberId)
@@ -58,14 +58,14 @@ export default function Filter({ actions, locationId, history, fav }) {
             }
         }
         return searchParams.toString()
-    }
+    }, [memberId, timeSelected, actionsChecked, actionIds, history])
 
-    const buildURL = () => {
+    const buildURL = useCallback(() => {
         const searchParams = buildSearchParams()
         const segment = history ? 'history' : fav ? 'favourites' : 'dashboard'
         const url = `/${locationId}/${segment}/1`
         return `${url}?${searchParams}`
-    }
+    }, [history, fav, locationId, buildSearchParams])
 
     const filterButtonHandler = () => {
       router.push(currentURL)
@@ -73,7 +73,7 @@ export default function Filter({ actions, locationId, history, fav }) {
     }
     useEffect(() => {
         setCurrentURL(buildURL())
-    }, [memberId, timeSelected, actionsChecked])
+    }, [memberId, timeSelected, actionsChecked, buildURL])
 
     return (
         <Dialog open={showModal} onOpenChange={setShowModal}>

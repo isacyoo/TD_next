@@ -1,8 +1,8 @@
 'use client'
-import { use, useState, useEffect } from 'react'
+import { useState } from 'react'
 import ActionDropdown from "./ActionDropdown"
 import ActionConfirmModal from './ActionConfirmModal'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { clientFetch } from '@/util/clientApi'
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -16,7 +16,6 @@ export default function ActionContainer({ actions, currentAction, comment }) {
     const [ loading, setLoading ] = useState(false)
 
     const pathName = usePathname()
-    const router = useRouter()
     const eventId = pathName.split('/').slice(-1)[0]
 
     const applyActionToEvent = async (eventId, actionId) => {

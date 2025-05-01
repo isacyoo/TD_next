@@ -13,7 +13,7 @@ export default function ActionDropdown({ actions, selectedAction, setSelectedAct
             <SelectValue placeholder="Select action to perform"/>
         </SelectTrigger>
         <SelectContent>
-            {actions.map((action, i) => <SelectItem key={action.id} value={action.id} disabled={!action.is_enabled}>{action.name}</SelectItem>)}
+            {actions.map((action) => <SelectItem key={action.id} value={action.id} disabled={!action.is_enabled}>{action.name}</SelectItem>)}
         </SelectContent>
     </Select>
     )

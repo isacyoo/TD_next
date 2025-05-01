@@ -16,7 +16,7 @@ export default function VideoPanel({ videoUrls }) {
     useEffect(() => {
         const activeVideo = videoRefs[selectedVideo].current
         activeVideo.play()
-    }, [selectedVideo])
+    }, [selectedVideo, videoRefs])
 
     return (
         <div className="sm:w-full md:w-full lg:w-4/5 xl:w-4/5 ml-2">

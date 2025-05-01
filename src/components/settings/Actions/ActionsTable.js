@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { clientFetch } from '@/util/clientApi'
-import { useRouter } from 'next/navigation'
 import {
     Table,
     TableBody,
@@ -152,7 +151,7 @@ function ActionRow({ action, index, handleNameChange, handleIsTailgatingChange, 
         <TableRow>
             <TableCell>{action.id}</TableCell>
             <TableCell><Input value={action.name} onChange={(e) => handleNameChange(index, e.target.value)}></Input></TableCell>
-            <TableCell><Checkbox checked={action.is_tailgating ? true : false} onCheckedChange={(e) => handleIsTailgatingChange(index)}></Checkbox></TableCell>
+            <TableCell><Checkbox checked={action.is_tailgating ? true : false} onCheckedChange={() => handleIsTailgatingChange(index)}></Checkbox></TableCell>
             <TableCell><ToggleEnable action={action} index={index} handleToggle={handleToggle}/></TableCell>
             <TableCell><DeleteButton index={index} handleDelete={handleDelete}/></TableCell>
         </TableRow>

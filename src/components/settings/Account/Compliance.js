@@ -44,7 +44,7 @@ export default function Compliance({ videoRetentionDays, streamRetentionHours })
         }
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async () => {
         if (videoRetention < 0 || videoRetention > 365) {
             toast.warning("Video retention days must be between 0 and 365")
             return

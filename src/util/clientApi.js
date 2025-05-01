@@ -1,6 +1,6 @@
 import { getCookie } from './cookie'
 
-export async function clientFetch(method, url, body={}, setLoading=(loading)=>{}) {
+export async function clientFetch(method, url, body={}, setLoading=()=>{}) {
     setLoading(true)
     return fetch(`/api${url}`, {
         method,

@@ -36,7 +36,7 @@ function APIResetPanel() {
     const [ hoverMessage, setHoverMessage ] = useState("Click to copy to clipboard")
     const [ newApiKey, setNewApiKey ] = useState("")
     const [ expiryDate, setExpiryDate ] = useState("")
-    const [ showModal, setShowModal ] = useState(false)
+    const [ , setShowModal ] = useState(false)
     const [ loading, setLoading ] = useState(false)
 
     const handleCopy = async () => {

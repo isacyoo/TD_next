@@ -116,7 +116,7 @@ export default function WeekSchedule({ locationId, schedule }) {
 							Select the hour, minute and duration of the run
 						</DialogDescription>
 					</DialogHeader>
-					<ModalContent closeModal={() => setShowModal(false)} onConfirm={modalConfirmFunction} selectedHour={selectedHour}
+					<ModalContent closeModal={() => setShowModal(false)} selectedHour={selectedHour}
 						selectedMinute={selectedMinute} duration={duration} setSelectedHour={setSelectedHour} setSelectedMinute={setSelectedMinute}
 						setDuration={setDuration} hours={hours} minutes={minutes}/>
 					<DialogFooter>
@@ -211,7 +211,7 @@ function SingleRun({ run, updateRun, removeRun }) {
 }
 
 
-function ModalContent({ closeModal, onConfirm, hours, minutes, selectedHour, selectedMinute, duration, setSelectedHour, setSelectedMinute, setDuration }) {
+function ModalContent({ hours, minutes, selectedHour, selectedMinute, duration, setSelectedHour, setSelectedMinute, setDuration }) {
 	const handleDurationInputChange = (e) => {
 		let value = e.target.value
 		if (value.length > 5) {
@@ -226,15 +226,6 @@ function ModalContent({ closeModal, onConfirm, hours, minutes, selectedHour, sel
 
 		if (value === '' || (!isNaN(value) && parseFloat(value) >= 0 && parseFloat(value) <= 24)) {
 			setDuration(e.target.value)
-		}
-	}
-
-	const validateInputAndConfirm = (hour, minute, duration) => {
-		if (duration === '') {
-			toast("Duration cannot be empty")
-		}
-		else {
-			onConfirm(hour, minute, duration)
 		}
 	}
 

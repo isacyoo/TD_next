@@ -10,7 +10,6 @@ import {
     HoverCardContent,
     HoverCardTrigger,
   } from "@/components/ui/hover-card"
-import { set } from "react-hook-form";
 
 export default function SaveEvent({ eventId, saved }) {
     const [ currentSaved, setCurrentSaved ] = useState(saved)

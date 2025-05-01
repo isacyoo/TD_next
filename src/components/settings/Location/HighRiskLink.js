@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { SettingsH2 } from '@/components/settings/SettingsHeaders';
 
 export default function HighRiskLink() {
     return (
