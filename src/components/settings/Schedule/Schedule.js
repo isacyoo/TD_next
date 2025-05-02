@@ -1,4 +1,3 @@
-import { fetcher } from '@/util/api'
 import Link from 'next/link'
 import { CiStreamOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
@@ -9,18 +8,9 @@ import {
     TooltipContent,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
-
 import { SettingsH1 } from "@/components/settings/SettingsHeaders"
+import { getLocations } from '@/util/serverFetch'
 
-async function getLocations() {
-    const res = await fetcher('/locations')
-    if (res.ok) {
-        const data = await res.json()
-        return data
-    } else {
-        return []
-    }
-}
 
 export default async function ScheuduleWithSuspense() {
     return (

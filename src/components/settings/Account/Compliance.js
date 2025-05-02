@@ -8,6 +8,12 @@ import { toast } from "sonner"
 import { SettingsH2 } from "@/components/settings/SettingsHeaders"
 
 export default function Compliance({ videoRetentionDays, streamRetentionHours }) {
+    if ( videoRetentionDays === null ) {
+        videoRetentionDays = ""
+    }
+    if ( streamRetentionHours === null ) {
+        streamRetentionHours = ""
+    }
     const [ videoRetention, setVideoRetention ] = useState(videoRetentionDays)
     const [ streamRetention, setStreamRetention ] = useState(streamRetentionHours)
     const [ loading, setLoading ] = useState(false)

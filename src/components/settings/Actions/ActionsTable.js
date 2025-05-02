@@ -88,7 +88,7 @@ export default function ActionsTable({ actions }) {
             }
         }).then(
             (res) => {
-                setAllActions(res)
+                setAllActions(res.actions)
             }
         )
     }

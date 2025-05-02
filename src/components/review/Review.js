@@ -1,6 +1,7 @@
 import { fetcher } from "@/util/api"
 import VideoPanel from "@/components/review/VideoPanel/VideoPanel"
 import UserPanel from "@/components/review/UserPanel/UserPanel"
+import { getActions } from '@/util/serverFetch'
 
 async function getVideoUrl(id) {
     const res = await fetcher(`/video/${id}`)
@@ -34,15 +35,6 @@ async function getAdjacentEvents(id, params) {
     if (res.status === 404) {
         return {}
     }
-    throw new Error(res.status)
-}
-
-async function getActions() {
-    const res = await fetcher('/actions')
-    if (res.ok) {
-        return await res.json()
-    }
-
     throw new Error(res.status)
 }
 
