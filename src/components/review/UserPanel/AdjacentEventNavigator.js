@@ -17,8 +17,8 @@ export default function AdjacentEventNavigator({ adjacentEvents, locationId, his
     <div className='flex flex-col items-center'>
     {showAdjacentEvents ? 
         <div className='mt-5 flex gap-2'>
-            {previous_event===null ? <></> : <AdjacentEventNavigationButton eventId={previous_event} params={params} text="Previous Video"/>}
-            {next_event===null ? <></> : <AdjacentEventNavigationButton eventId={next_event} params={params} text="Next Video"/>}
+            {previous_event===null ? <></> : <AdjacentEventNavigationButton eventId={previous_event} params={params} text="Previous Event"/>}
+            {next_event===null ? <></> : <AdjacentEventNavigationButton eventId={next_event} params={params} text="Next Event"/>}
         </div>
         : <></>}
         <Link href={`/${locationId}/${history ? 'history' : 'dashboard'}/1?${params}`}>

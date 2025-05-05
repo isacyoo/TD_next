@@ -24,6 +24,7 @@ COPY --from=builder /app/.next/static ./.next/standalone/.next/static
 
 # Set the environment variables (if needed)
 ENV NODE_ENV=production
+ENV HOSTNAME=0.0.0.0
 
 EXPOSE 3000
 

@@ -1,16 +1,7 @@
-import { fetcher } from "@/util/api"
 import HighRiskMembersTable from "./HighRiskMembersTable"
 import HighRiskMembersReviewSetting from "./HighRiskMembersReviewSetting"
 import { SettingsH2 } from "@/components/settings/SettingsHeaders"
-import { getHighRiskMembers } from "@/util/serverFetch"
-
-async function getUserSettings() {
-    const res = await fetcher("/user-settings")
-    if (res.ok) {
-        return await res.json()
-    }
-    throw new Error(res.status)
-}
+import { getHighRiskMembers, getUserSettings } from "@/util/serverFetch"
 
 export default async function HighRiskMembers() {
     const [ members, userSettings ] = await Promise.all([

@@ -24,11 +24,25 @@ import {
 import { SettingsH2 } from "@/components/settings/SettingsHeaders"
 import { toast } from 'sonner'
 
-export default function APIKeyPanel() {
+export default function APIKeyPanel({ apiKeyExpiryDate }) {
     return (
         <div>
+            <APIKeyExpiryInfo apiKeyExpiryDate={apiKeyExpiryDate} />
             <APIResetPanel />
         </div>
+    )
+}
+
+function APIKeyExpiryInfo({ apiKeyExpiryDate }) {
+    return (
+        <Alert className="mb-4">
+            <AlertTitle>
+                API key expiry
+            </AlertTitle>
+            <AlertDescription>
+                Your current API key expires on {apiKeyExpiryDate}
+            </AlertDescription>
+        </Alert>
     )
 }
 

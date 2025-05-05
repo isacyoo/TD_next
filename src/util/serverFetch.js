@@ -29,3 +29,12 @@ export async function getLocations() {
         return []
     }
 }
+
+export async function getUserSettings() {
+    const res = await fetcher("/user-settings")
+    if (res.ok) {
+        return await res.json()
+    } else {
+        return []
+    }
+}
