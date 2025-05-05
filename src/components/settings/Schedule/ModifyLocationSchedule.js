@@ -23,6 +23,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 
+const intToTime = (time) => {
+	return time.toString().padStart(2, '0')
+}
 
 export default function WeekSchedule({ locationId, schedule }) {
 	const hours = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11",
@@ -72,7 +75,7 @@ export default function WeekSchedule({ locationId, schedule }) {
 			toast.error("Schedule is not valid")
 			return
 		}
-		clientFetch('POST', `/schedule/${locationId}`, currentSchedule, setLoading).then(
+		clientFetch('PUT', `/schedule/${locationId}`, currentSchedule, setLoading).then(
 			(res) => {
 
 				if (res.ok) {
@@ -153,15 +156,15 @@ function DaySchedule({ dow, daySchedule, setDaySchedule, setModalConfirmFunction
 		setDuration("")
 		setShowModal(false)
 	}
-	const addRun = (time, duration) => {
-		const newRun = { start_time: time, duration }
+	const addRun = (startHour, startMinute, duration) => {
+		const newRun = { start_hour: startHour, start_minute: startMinute, duration }
 		console.log([...daySchedule, newRun])
 		setDaySchedule([...daySchedule, newRun])
 		resetModal()
 	}
 
-	const updateRun = (index, time, duration) => {
-		const newRun = { start_time: time, duration }
+	const updateRun = (index, startHour, startMinute, duration) => {
+		const newRun = { start_hour: startHour, start_minute: startMinute, duration }
 		setDaySchedule(daySchedule.map((run, i) => i === index ? newRun : run))
 		resetModal()
 	}
@@ -175,7 +178,7 @@ function DaySchedule({ dow, daySchedule, setDaySchedule, setModalConfirmFunction
 			<div className="flex justify-between items-center mb-4">
 				<h3>{dow}</h3>
 				<Button variant="outline" className="ml-4" onClick={() => {
-					setModalConfirmFunction(() => (hour, minute, duration) => addRun(`${hour}:${minute}`, parseFloat(duration)))
+					setModalConfirmFunction(() => (hour, minute, duration) => addRun(parseInt(hour), parseInt(minute), parseFloat(duration)))
 					setShowModal(true)
 				}
 				}>Add run</Button>
@@ -184,8 +187,8 @@ function DaySchedule({ dow, daySchedule, setDaySchedule, setModalConfirmFunction
                 {daySchedule.map((run, index) => {
                     return <SingleRun key={index} run={run} updateRun={() => {
 						setModalConfirmFunction(() => (hour, minute, duration) => updateRun(index, `${hour}:${minute}`, parseFloat(duration)))
-						setSelectedHour(run.start_time.split(":")[0])
-						setSelectedMinute(run.start_time.split(":")[1])
+						setSelectedHour(intToTime(run.start_hour))
+						setSelectedMinute(intToTime(run.start_minute))
 						setDuration(run.duration)
 						setShowModal(true)
 					}} removeRun={() => removeRun(index)} />
@@ -201,7 +204,7 @@ function SingleRun({ run, updateRun, removeRun }) {
     return (
         <div className='border border-solid border-neutral/100 rounded p-4 mb-4'>
 			<div className="flex justify-between items-center">
-				<p><b>Start time: </b>{run.start_time}</p>
+				<p><b>Start time: </b>{`${intToTime(run.start_hour)}:${intToTime(run.start_minute)}`}</p>
 				<Button variant="outline" size="icon" className="w-6 h-6 p-0 text-xs" onClick={removeRun}>×</Button>	
 			</div>
             <p className="my-2"><b>Duration: </b>{run.duration}</p>
