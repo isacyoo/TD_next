@@ -17,7 +17,7 @@ export async function fetcher(url) {
 }
 
 export function getSession() {
-    return fetcher('/user-info')
+    return fetcher('/session')
 }
 
 export async function isAuthenticated(request) {

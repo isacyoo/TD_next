@@ -68,7 +68,7 @@ export default function Compliance({ videoRetentionDays, streamRetentionHours })
         if (res.ok) {
             toast.success("Account settings updated successfully")
         } else {
-            throw new Error("Failed to update account settings")
+            toast.error("Failed to update account settings. Please try again.")
         }
     }
 

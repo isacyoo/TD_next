@@ -34,13 +34,15 @@ async function Schedule() {
 
 function Location({ location }) {
     return (
-        <div className="bg-secondary/0 p-6 my-8 rounded-xl border-2 border-primary/20 shadow-sm hover:shadow-lg transition-shadow w-[420px] duration-300">
+        <div className="bg-secondary/0 my-8 rounded-xl border-2 border-primary/20 shadow-sm hover:shadow-lg transition-shadow w-[420px] duration-300">
             <Link href={`/settings/schedule/${location.id}`}>
-                <div className="flex justify-between items-center my-2">
-                    <h2 className="font-bold">{location.name}</h2>
-                    <UploadMethodIcon method={location.upload_method} />
+                <div className="p-6">
+                    <div className="flex justify-between items-center my-2">
+                        <h2 className="font-bold">{location.name}</h2>
+                        <UploadMethodIcon method={location.upload_method} />
+                    </div>
+                    <LocationScheduleMini schedule={location.operational_hours} />
                 </div>
-                <LocationScheduleMini schedule={location.operational_hours} />
             </Link>
         </div>
     )
