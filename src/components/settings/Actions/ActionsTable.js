@@ -82,15 +82,21 @@ export default function ActionsTable({ actions }) {
         
             if (res.ok) {
                 toast.success("Actions updated")
-                return res.json()
+                return res.json().then(
+                    (res) => {
+                        setAllActions(res.actions)
+                    }
+                )
+            } else if (res.status == 400) {
+                res.json().then((res) => {
+                    console.log(res)
+                    if (res.msg === "Action has associated events") {
+                        toast.error("Action to be deleted has associated events. Please delete the events first") 
+                    }})
             } else {
                 toast.error("Failed to update actions. Please try again")
             }
-        }).then(
-            (res) => {
-                setAllActions(res.actions)
-            }
-        )
+        })
     }
 
     const addAction = () => {
